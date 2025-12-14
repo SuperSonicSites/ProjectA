@@ -1,0 +1,9 @@
+{{ printf "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" | safeHTML }}
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  {{ range .Site.Sections }}
+  <sitemap>
+    <loc>{{ .Permalink }}sitemap.xml</loc>
+    <lastmod>{{ .Date.Format "2006-01-02T15:04:05-07:00" }}</lastmod>
+  </sitemap>
+  {{ end }}
+</sitemapindex>

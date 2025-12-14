@@ -1,0 +1,12 @@
+name = "Visual Sanctuary Theme"
+license = "MIT"
+licenselink = "https://github.com/yourname/yourtheme/blob/master/LICENSE"
+description = "Custom theme for Visual Sanctuary"
+homepage = "http://example.com/"
+tags = ["website", "starter"]
+features = ["tailwindcss", "alpinejs"]
+min_version = "0.41.0"
+
+[author]
+  name = "Antigravity"
+  homepage = ""

@@ -1,0 +1,23 @@
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Node
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Hugo
+public/
+resources/_gen/
+.hugo_build.lock
+
+# Cloudflare / Wrangler
+.wrangler/
+.dev.vars
+
+# Generated Assets (Tailwind)
+# We generate this on build, so no need to commit unless you want to.
+/static/css/main.css

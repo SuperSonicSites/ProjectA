@@ -1,3 +1,29 @@
-baseURL = 'https://example.org/'
+baseURL = 'https://paperpause.app/'
 languageCode = 'en-us'
-title = 'My New Hugo Site'
+title = 'Paper Pause'
+theme = 'visual-sanctuary-theme'
+
+# GA4 Integration
+googleAnalytics = "G-R0NHTPYWFY"
+
+[taxonomies]
+  category = "categories"  # Silo (Animals)
+  series = "collections"   # Sub-Silo (Cats)
+
+
+
+[module]
+  [module.hugoVersion]
+    extended = true
+    min = "0.110.0"
+
+[outputFormats]
+  [outputFormats.SECTION_SITEMAP]
+    mediaType = "application/xml"
+    baseName = "sitemap"
+    isPlainText = false
+    isHTML = false
+
+[outputs]
+  home = ["HTML", "RSS", "SITEMAP"]
+  section = ["HTML", "RSS", "SECTION_SITEMAP"]

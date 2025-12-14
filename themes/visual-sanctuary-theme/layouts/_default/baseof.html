@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode }}">
+
+<head>
+    {{ partial "head.html" . }}
+</head>
+
+<body class="bg-stone-50 text-slate-800 font-body antialiased flex flex-col min-h-screen">
+
+    {{ partial "header.html" . }}
+
+    <main class="flex-grow">
+        {{ block "main" . }}{{ end }}
+    </main>
+
+    {{ partial "footer.html" . }}
+
+</body>
+
+</html>
