@@ -16,6 +16,16 @@
     "tailwindcss": "^3.4.0"
   },
   "devDependencies": {
-    "pagefind": "^1.4.0"
+    "@aws-sdk/client-s3": "^3.948.0",
+    "@google/generative-ai": "^0.24.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "fs-extra": "^11.3.2",
+    "glob": "^13.0.0",
+    "matter-js": "^0.20.0",
+    "pagefind": "^1.4.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
   }
 }

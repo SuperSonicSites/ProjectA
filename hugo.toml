@@ -1,7 +1,10 @@
 baseURL = 'https://paperpause.app/'
 languageCode = 'en-us'
-title = 'Paper Pause'
+title = 'PaperPause'
 theme = 'visual-sanctuary-theme'
+
+[params]
+  description = "Discover the best free printable coloring pages for adults and kids. High-quality animals, mandalas, and more."
 
 # GA4 Integration
 googleAnalytics = "G-R0NHTPYWFY"
@@ -12,7 +15,28 @@ googleAnalytics = "G-R0NHTPYWFY"
 
 
 
+
+[menu]
+  [[menu.main]]
+    identifier = "home"
+    name = "Home"
+    url = "/"
+    weight = 10
+
+  [[menu.main]]
+    identifier = "about"
+    name = "About"
+    url = "/about/"
+    weight = 20
+
+  [[menu.main]]
+    identifier = "contact"
+    name = "Contact"
+    url = "/contact/"
+    weight = 30
+
 [module]
+
   [module.hugoVersion]
     extended = true
     min = "0.110.0"

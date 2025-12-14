@@ -21,3 +21,6 @@ resources/_gen/
 # Generated Assets (Tailwind)
 # We generate this on build, so no need to commit unless you want to.
 /static/css/main.css
+
+# Local Automation Scripts
+scripts/morning-routine/

@@ -3,6 +3,34 @@
 <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
 <meta name="description"
     content="{{ if .Description }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+<link rel="canonical" href="{{ .Permalink }}" />
+
+{{/* Data Preparation */}}
+{{ $title := .Title }}
+{{ if .IsHome }}{{ $title = .Site.Title }}{{ end }}
+
+{{ $desc := .Description }}
+{{ if not $desc }}{{ $desc = .Site.Params.description }}{{ end }}
+
+{{ $image := "/images/og-default.jpg" | absURL }}
+{{ if .Params.image_url }}{{ $image = .Params.image_url | absURL }}{{ end }}
+
+<!-- Open Graph -->
+<meta property="og:title" content="{{ $title }}" />
+<meta property="og:description" content="{{ $desc }}" />
+<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}" />
+<meta property="og:url" content="{{ .Permalink }}" />
+<meta property="og:image" content="{{ $image }}" />
+<meta property="og:site_name" content="{{ .Site.Title }}" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="{{ $title }}" />
+<meta name="twitter:description" content="{{ $desc }}" />
+<meta name="twitter:image" content="{{ $image }}" />
+
+<!-- Schema.org JSON-LD -->
+{{ partial "seo/schema.html" . }}
 
 <!-- Tailwind (Static Output) -->
 <link rel="stylesheet" href="/css/main.css">

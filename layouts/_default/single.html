@@ -19,12 +19,7 @@
     <div class="lg:w-[35%] bg-white p-6 lg:p-12 flex flex-col h-full lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto"
         data-pagefind-body>
         <!-- Breadcrumbs -->
-        <nav class="text-sm text-slate-400 mb-8 font-medium">
-            <a href="/" class="hover:text-teal-600">Home</a> /
-            {{ range .Page.Ancestors.Reverse }}
-            <a href="{{ .RelPermalink }}" class="hover:text-teal-600">{{ .LinkTitle }}</a> /
-            {{ end }}
-        </nav>
+        {{ partial "breadcrumbs.html" . }}
 
         <h1 class="font-heading text-3xl lg:text-4xl font-bold text-slate-800 mb-4 leading-tight">{{ .Title }}</h1>
 

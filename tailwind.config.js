@@ -1,3 +1,5 @@
+const colors = require('tailwindcss/colors')
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -16,10 +18,7 @@ module.exports = {
         stone: {
           50: '#FAFAF9', // Page BG
         },
-        indigo: {
-          600: '#4F46E5', // Primary
-          700: '#4338CA', // Primary Hover
-        },
+        teal: colors.teal,
         rose: {
           500: '#F43F5E', // Accent
         },

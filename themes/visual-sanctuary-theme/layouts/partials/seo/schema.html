@@ -1,0 +1,100 @@
+{{/* JSON-LD Schema Generation */}}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {{/* 1. Global WebSite Schema */}}
+    {
+      "@type": "WebSite",
+      "@id": "{{ .Site.BaseURL }}#website",
+      "url": "{{ .Site.BaseURL }}",
+      "name": "{{ .Site.Title }}",
+      "description": "{{ .Site.Params.description | default "Free printable coloring pages for adults and kids." }}",
+      "potentialAction": [
+        {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "{{ .Site.BaseURL }}?s={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      ],
+      "inLanguage": "{{ .Site.LanguageCode }}"
+    }
+
+    {{/* 2. Breadcrumbs Schema */}}
+    ,
+    {
+      "@type": "BreadcrumbList",
+      "@id": "{{ .Permalink }}#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "{{ .Site.BaseURL }}"
+        }
+        {{ $qt := 2 }}
+        {{ range .Page.Ancestors.Reverse }}
+        ,{
+          "@type": "ListItem",
+          "position": {{ $qt }},
+          "name": "{{ .Title }}",
+          "item": "{{ .Permalink }}"
+        }
+        {{ $qt = add $qt 1 }}
+        {{ end }}
+        ,{
+          "@type": "ListItem",
+          "position": {{ $qt }},
+          "name": "{{ .Title }}",
+          "item": "{{ .Permalink }}"
+        }
+      ]
+    }
+
+    {{/* 3. Single Asset Schema (ImageObject + CreativeWork) */}}
+    {{ if and .IsPage (not .IsHome) }}
+    ,
+    {
+      "@type": "ImageObject",
+      "@id": "{{ .Permalink }}#primaryimage",
+      "url": "{{ .Params.image_url | absURL }}",
+      "contentUrl": "{{ .Params.image_url | absURL }}",
+      "caption": "{{ .Title }}"
+    }
+    ,
+    {
+      "@type": "CreativeWork",
+      "@id": "{{ .Permalink }}#creativework",
+      "url": "{{ .Permalink }}",
+      "name": "{{ .Title }}",
+      "headline": "{{ .Title }}",
+      "description": "{{ .Description | default .Summary | plainify }}",
+      "image": { "@id": "{{ .Permalink }}#primaryimage" },
+      "genre": "{{ .Params.style }} Coloring Page",
+      {{ $keywords := slice }}
+      {{ if .Params.categories }}{{ $keywords = $keywords | append .Params.categories }}{{ end }}
+      {{ if .Params.collections }}{{ $keywords = $keywords | append .Params.collections }}{{ end }}
+      "keywords": "{{ delimit $keywords ", " }}",
+      "isPartOf": { "@id": "{{ .Site.BaseURL }}#website" },
+      "datePublished": "{{ .Date.Format "2006-01-02T15:04:05-07:00" }}",
+      "dateModified": "{{ .Lastmod.Format "2006-01-02T15:04:05-07:00" }}",
+      "author": {
+        "@type": "Organization",
+        "name": "{{ .Site.Title }}",
+        "url": "{{ .Site.BaseURL }}"
+      } 
+      {{ if .Params.download_url }}
+      ,"associatedMedia": {
+        "@type": "DigitalDocument",
+        "contentUrl": "{{ .Params.download_url | absURL }}",
+        "encodingFormat": "application/pdf"
+      }
+      {{ end }}
+    }
+    {{ end }}
+  ]
+}
+</script>

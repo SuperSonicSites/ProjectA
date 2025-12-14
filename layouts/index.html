@@ -28,8 +28,8 @@
             Categories</h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {{ range .Site.Taxonomies.categories }}
-            <a href="{{ .Page.RelPermalink }}"
+            {{ range where .Site.Sections "Title" "in" (slice "Animals") }}
+            <a href="{{ .RelPermalink }}"
                 class="group block bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-slate-100">
                 <div class="aspect-[4/3] bg-slate-100 relative grid grid-cols-2 gap-0.5">
                     <!-- Placeholder Visual Collage -->
@@ -39,39 +39,18 @@
                     <div class="bg-teal-50"></div>
                     <div
                         class="absolute inset-0 flex items-center justify-center bg-black/5 opacity-0 group-hover:opacity-100 transition">
-                        <span class="bg-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">Browse {{ .Page.Title
+                        <span class="bg-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">Browse {{ .Title
                             }}</span>
                     </div>
                 </div>
                 <div class="p-6">
-                    <h3 class="font-heading text-xl font-bold group-hover:text-teal-600 transition">{{ .Page.Title }}
+                    <h3 class="font-heading text-xl font-bold group-hover:text-teal-600 transition">{{ .Title }}
                     </h3>
-                    <p class="text-slate-500 text-sm mt-1">{{ .Count }} Collections</p>
+                    <p class="text-slate-500 text-sm mt-1">{{ len .Pages }} Collections</p>
                 </div>
             </a>
             {{ end }}
         </div>
     </div>
 </section>
-
-<!-- Seasonal Rail (Static Placeholder) - HIDDEN FOR PILOT
-<section class="bg-teal-50 py-16 mb-16">
-    <div class="container mx-auto px-4">
-        <div class="flex justify-between items-end mb-8">
-            <h2 class="font-heading text-2xl font-bold text-slate-800">Trending Now</h2>
-            <a href="#" class="text-teal-600 font-bold hover:underline">View all &rarr;</a>
-        </div>
-        <div class="flex gap-6 overflow-x-auto pb-8 snap-x">
-            <div class="min-w-[280px] snap-center bg-white p-4 rounded-xl shadow-sm">
-                <div class="aspect-[3/4] bg-stone-100 rounded-lg mb-4"></div>
-                <h4 class="font-bold">Simple Spring Gardens</h4>
-            </div>
-             <div class="min-w-[280px] snap-center bg-white p-4 rounded-xl shadow-sm">
-                <div class="aspect-[3/4] bg-stone-100 rounded-lg mb-4"></div>
-                <h4 class="font-bold">Baby Chicks</h4>
-            </div>
-        </div>
-    </div>
-</section>
--->
 {{ end }}
