@@ -1,0 +1,37 @@
+{{ printf "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" | safeHTML }}
+{{ if .Parent.IsHome }}
+  {{/* Top-level section → Create sitemap index pointing to subsections */}}
+  <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    {{ range .Sections }}
+    <sitemap>
+      <loc>{{ .Permalink }}sitemap.xml</loc>
+      <lastmod>{{ .Date.Format "2006-01-02T15:04:05-07:00" }}</lastmod>
+    </sitemap>
+    {{ end }}
+  </sitemapindex>
+{{ else }}
+  {{/* Subsection → Create urlset with all pages */}}
+  <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    {{/* Include the subsection index page itself */}}
+    <url>
+      <loc>{{ .Permalink }}</loc>
+      <lastmod>{{ .Date.Format "2006-01-02T15:04:05-07:00" }}</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+    </url>
+    {{/* Include all regular pages in this subsection */}}
+    {{ range .RegularPages }}
+    <url>
+      <loc>{{ .Permalink }}</loc>
+      <lastmod>{{ .Date.Format "2006-01-02T15:04:05-07:00" }}</lastmod>
+      {{ with .Sitemap.ChangeFreq }}
+      <changefreq>{{ . }}</changefreq>
+      {{ end }}
+      {{ if ge .Sitemap.Priority 0.0 }}
+      <priority>{{ .Sitemap.Priority }}</priority>
+      {{ end }}
+    </url>
+    {{ end }}
+  </urlset>
+{{ end }}
+
