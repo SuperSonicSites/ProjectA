@@ -3,70 +3,68 @@
 ## Daily Schedule (EST)
 
 ```
-🌅 6:00 AM EST → 🐱 Generate 5 Cat Images
-🌆 6:00 PM EST → 🐶 Generate 5 Dog Images
+🌅 5:00 AM EST → 🐱 5 Cat Images + 🐶 5 Dog Images
 ```
+
+**Total per day**: 10 images (5 cats + 5 dogs)
 
 ## UTC Times (for GitHub Actions)
 
 ```
-11:00 AM UTC → 🐱 Cats  (6:00 AM EST)
-11:00 PM UTC → 🐶 Dogs  (6:00 PM EST)
+10:00 AM UTC → 🐱 Cats + 🐶 Dogs  (5:00 AM EST)
 ```
 
 ## Cron Configuration
 
 ```yaml
 schedule:
-  # Cats at 6 AM EST
-  - cron: '0 11 * * *'
-  # Dogs at 6 PM EST
-  - cron: '0 23 * * *'
+  # Both cats and dogs at 5 AM EST
+  - cron: '0 10 * * *'
 ```
 
 ## Daylight Saving Time Adjustment
 
 During **EDT** (March - November), EST becomes UTC-4 instead of UTC-5.
 
-If you want to maintain the same local times during DST:
+If you want to maintain the same local time (5 AM) during DST:
 
 ```yaml
 schedule:
-  # Cats at 6 AM EDT
-  - cron: '0 10 * * *'
-  # Dogs at 6 PM EDT
-  - cron: '0 22 * * *'
+  # 5 AM EDT
+  - cron: '0 9 * * *'
 ```
 
 ## Time Zone Conversion Reference
 
 | Local Time | EST (UTC-5) | EDT (UTC-4) |
 |------------|-------------|-------------|
+| 5:00 AM    | 10:00 UTC   | 9:00 UTC    |
 | 6:00 AM    | 11:00 UTC   | 10:00 UTC   |
-| 6:00 PM    | 23:00 UTC   | 22:00 UTC   |
 
 ## What Happens Each Run
 
-1. ✅ Workflow triggers at scheduled time
-2. ✅ Determines which animal type to generate (cats or dogs)
-3. ✅ Generates 5 images using Recraft API
-4. ✅ Uploads to Cloudflare R2 and CF Images
+1. ✅ Workflow triggers at 5:00 AM EST (10:00 AM UTC)
+2. ✅ Generates 5 cat images using Recraft API
+3. ✅ Generates 5 dog images using Recraft API
+4. ✅ Uploads all images to Cloudflare R2 and CF Images
 5. ✅ Creates markdown files with metadata
-6. ✅ Sets `draft: false` (publishes live)
+6. ✅ Saves as **drafts** (`draft: true`) - NOT published automatically
 7. ✅ Commits and pushes to repository
+
+**Note**: Images remain as drafts until manually published.
 
 ## Manual Override
 
 You can manually trigger the workflow anytime with options:
-- Generate **cats only**
-- Generate **dogs only**
-- Generate **both**
+- Generate **cats only** - 5 cat images
+- Generate **dogs only** - 5 dog images
+- Generate **both** - 5 cats + 5 dogs
 
 ---
 
 **Quick Reference:**
-- Morning (6 AM EST) = Cats 🐱
-- Evening (6 PM EST) = Dogs 🐶
-- Each run = 5 images
-- Total per day = 10 images (5 cats + 5 dogs)
+- Daily run: 5:00 AM EST (10:00 AM UTC)
+- Animals: Both 🐱 Cats + 🐶 Dogs
+- Per run: 10 images (5 cats + 5 dogs)
+- Status: Saved as drafts (manual publishing required)
 

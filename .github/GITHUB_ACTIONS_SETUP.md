@@ -4,14 +4,15 @@ This document explains how to set up the daily image generation workflow.
 
 ## Overview
 
-The workflow runs twice daily:
-- **6:00 AM EST (11:00 AM UTC)**: Generates 5 cat images
-- **6:00 PM EST (11:00 PM UTC)**: Generates 5 dog images
+The workflow runs once daily:
+- **5:00 AM EST (10:00 AM UTC)**: Generates 5 cat images + 5 dog images
 
 Each run:
-1. Generates 5 images (cats or dogs depending on schedule)
-2. Sets `draft: false` on all generated images (publishes them live)
+1. Generates 10 images total (5 cats + 5 dogs)
+2. **Saves as drafts** (`draft: true`) - images are NOT published automatically
 3. Commits and pushes the changes to the repository
+
+**Note**: Images remain as drafts until you manually publish them.
 
 ## Required GitHub Secrets
 
@@ -71,19 +72,17 @@ You can also trigger the workflow manually:
 
 ## Workflow Schedule
 
-The workflow runs automatically twice daily:
-- **6:00 AM EST (11:00 AM UTC)** - Generates 5 cat images
-- **6:00 PM EST (11:00 PM UTC)** - Generates 5 dog images
+The workflow runs automatically once daily:
+- **5:00 AM EST (10:00 AM UTC)** - Generates 5 cat images + 5 dog images
 
-**Note**: During Daylight Saving Time (EDT), the times adjust to:
-- **6:00 AM EDT (10:00 AM UTC)** - Update cron to `0 10 * * *` for cats
-- **6:00 PM EDT (10:00 PM UTC)** - Update cron to `0 22 * * *` for dogs
+**Note**: During Daylight Saving Time (EDT), EST becomes UTC-4:
+- **5:00 AM EDT (9:00 AM UTC)** - Update cron to `0 9 * * *` if you want to keep the same local time
 
-**To change**: Edit `.github/workflows/daily-image-generation.yml` and modify the cron schedules
+**To change**: Edit `.github/workflows/daily-image-generation.yml` and modify the cron schedule
 
 ### Common Cron Examples
+- `0 10 * * *` - Daily at 10:00 AM UTC (5 AM EST)
 - `0 11 * * *` - Daily at 11:00 AM UTC (6 AM EST)
-- `0 23 * * *` - Daily at 11:00 PM UTC (6 PM EST)
 - `0 */6 * * *` - Every 6 hours
 - `0 9 * * 1-5` - Weekdays at 9:00 AM UTC
 
@@ -104,6 +103,23 @@ The workflow runs automatically twice daily:
 2. Check if the `GITHUB_TOKEN` has write permissions:
    - Go to **Settings** → **Actions** → **General**
    - Under "Workflow permissions", select "Read and write permissions"
+
+### Re-enable Auto-Publishing
+
+If you want images to publish automatically (set `draft: false`), uncomment these lines in the workflow:
+
+```yaml
+# Auto-publish disabled - images remain as draft: true
+# - name: Set all new images to draft=false
+#   run: npx ts-node scripts/morning-routine/tasks/publish-drafts.ts
+```
+
+Remove the `#` to enable:
+
+```yaml
+- name: Set all new images to draft=false
+  run: npx ts-node scripts/morning-routine/tasks/publish-drafts.ts
+```
 
 ## Security Notes
 

@@ -2,10 +2,8 @@ name: Daily Image Generation
 
 on:
   schedule:
-    # Cats: 6:00 AM EST = 11:00 AM UTC (EST is UTC-5)
-    - cron: '0 11 * * *'
-    # Dogs: 6:00 PM EST = 11:00 PM UTC (EST is UTC-5)
-    - cron: '0 23 * * *'
+    # Both cats and dogs: 5:00 AM EST = 10:00 AM UTC (EST is UTC-5)
+    - cron: '0 10 * * *'
   workflow_dispatch: # Allow manual triggers
     inputs:
       animal_type:
@@ -55,19 +53,11 @@ jobs:
       - name: Determine which animals to generate
         id: determine_animals
         run: |
-          # Get current hour in UTC
-          CURRENT_HOUR=$(date -u +%H)
-          
           # If manually triggered, use input
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             ANIMAL_TYPE="${{ inputs.animal_type }}"
-          # If triggered by cron at 11:00 UTC (6 AM EST) - generate cats
-          elif [ "$CURRENT_HOUR" -eq 11 ]; then
-            ANIMAL_TYPE="cats"
-          # If triggered by cron at 23:00 UTC (6 PM EST) - generate dogs
-          elif [ "$CURRENT_HOUR" -eq 23 ]; then
-            ANIMAL_TYPE="Dogs"
           else
+            # Scheduled run - generate both cats and dogs
             ANIMAL_TYPE="both"
           fi
           
@@ -82,8 +72,9 @@ jobs:
         if: steps.determine_animals.outputs.animal_type == 'Dogs' || steps.determine_animals.outputs.animal_type == 'both'
         run: npm run generate animals Dogs 5
         
-      - name: Set all new images to draft=false
-        run: npx ts-node scripts/morning-routine/tasks/publish-drafts.ts
+      # Auto-publish disabled - images remain as draft: true
+      # - name: Set all new images to draft=false
+      #   run: npx ts-node scripts/morning-routine/tasks/publish-drafts.ts
         
       - name: Configure Git
         run: |

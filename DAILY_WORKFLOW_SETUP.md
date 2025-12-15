@@ -22,17 +22,16 @@ A fully automated GitHub Actions workflow that runs daily to generate and publis
 
 ## What the Workflow Does
 
-The workflow runs **twice daily** on a schedule:
+The workflow runs **once daily** at 5:00 AM EST:
 
-### Morning Run (6:00 AM EST)
 1. ✅ **Generates 5 cat images** - Uses Recraft API with cat prompts
-2. ✅ **Sets draft to false** - Automatically publishes images
-3. ✅ **Commits changes** - Pushes to repository with timestamp
+2. ✅ **Generates 5 dog images** - Uses Recraft API with dog prompts
+3. ✅ **Saves as drafts** - Images remain `draft: true` (not published)
+4. ✅ **Commits changes** - Pushes to repository with timestamp
 
-### Evening Run (6:00 PM EST)
-1. ✅ **Generates 5 dog images** - Uses Recraft API with dog prompts
-2. ✅ **Sets draft to false** - Automatically publishes images
-3. ✅ **Commits changes** - Pushes to repository with timestamp
+**Total**: 10 images generated per day (5 cats + 5 dogs)
+
+**Important**: Images are saved as drafts and require manual publishing.
 
 ## Next Steps
 
@@ -66,9 +65,8 @@ This allows the workflow to commit and push changes.
 
 ### 3. Test the Workflow
 
-#### Option A: Wait for Scheduled Runs
-- **6:00 AM EST (11:00 AM UTC)** - Cats are generated automatically
-- **6:00 PM EST (11:00 PM UTC)** - Dogs are generated automatically
+#### Option A: Wait for Scheduled Run
+- **5:00 AM EST (10:00 AM UTC)** - Both cats and dogs are generated automatically
 
 #### Option B: Trigger Manually
 1. Go to **Actions** tab
@@ -96,6 +94,42 @@ npm run generate animals Dogs 5
 npm run publish:drafts
 ```
 
+## Publishing Images
+
+### Manual Publishing
+
+Generated images remain as drafts. To publish them:
+
+**Option 1: Manually edit files**
+- Open the `.md` files in `content/animals/cats/` or `content/animals/Dogs/`
+- Change `draft: true` to `draft: false`
+- Commit and push
+
+**Option 2: Use the publish script**
+```bash
+npm run publish:drafts
+```
+This will set `draft: false` on ALL draft images.
+
+### Enable Auto-Publishing
+
+To automatically publish images after generation, edit `.github/workflows/daily-image-generation.yml` and uncomment:
+
+```yaml
+# Auto-publish disabled - images remain as draft: true
+# - name: Set all new images to draft=false
+#   run: npx ts-node scripts/morning-routine/tasks/publish-drafts.ts
+```
+
+Change to:
+
+```yaml
+- name: Set all new images to draft=false
+  run: npx ts-node scripts/morning-routine/tasks/publish-drafts.ts
+```
+
+Then commit and push the workflow file.
+
 ## Customization
 
 ### Change Schedule
@@ -104,18 +138,16 @@ Edit `.github/workflows/daily-image-generation.yml`:
 
 ```yaml
 schedule:
-  # Cats: 6:00 AM EST = 11:00 AM UTC
-  - cron: '0 11 * * *'
-  # Dogs: 6:00 PM EST = 11:00 PM UTC
-  - cron: '0 23 * * *'
+  # Both cats and dogs: 5:00 AM EST = 10:00 AM UTC
+  - cron: '0 10 * * *'
 ```
 
-**Note**: During Daylight Saving Time (March-November), EST becomes EDT (UTC-4).
-You may want to adjust:
-- Cats: `0 10 * * *` (6 AM EDT)
-- Dogs: `0 22 * * *` (6 PM EDT)
+**Time Zone Reference:**
+- 5 AM EST = 10:00 AM UTC (during standard time)
+- 5 AM EDT = 9:00 AM UTC (during daylight saving time)
 
-**Other Examples:**
+**Other Schedule Examples:**
+- `0 11 * * *` - 6 AM EST / 11 AM UTC
 - `0 */6 * * *` - Every 6 hours
 - `0 9 * * 1-5` - Weekdays at 9 AM UTC
 - `0 0 * * *` - Daily at midnight UTC
