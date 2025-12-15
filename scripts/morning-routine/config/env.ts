@@ -1,8 +1,9 @@
 import dotenv from 'dotenv';
 import path from 'path';
 
-// Load .env from project root
-dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
+// Load .dev.vars from project root (Cloudflare Wrangler standard for local secrets)
+// This file is gitignored and safe from accidental commits
+dotenv.config({ path: path.resolve(__dirname, '../../../.dev.vars') });
 
 export const ENV = {
     GEMINI_API_KEY: process.env.GEMINI_API_KEY || '',
@@ -28,6 +29,15 @@ export const ENV = {
     }
 };
 
+// Validate required secrets and provide helpful error messages
 if (!ENV.GEMINI_API_KEY) {
-    console.warn("WARNING: GEMINI_API_KEY is missing in .env");
+    console.warn("⚠️  WARNING: GEMINI_API_KEY is missing in .dev.vars");
+    console.warn("    Create a .dev.vars file in the project root with your API keys.");
+    console.warn("    See .dev.vars.example for the required format.");
+}
+
+const missingR2Creds = !ENV.R2.ACCOUNT_ID || !ENV.R2.ACCESS_KEY_ID || !ENV.R2.SECRET_ACCESS_KEY;
+if (missingR2Creds) {
+    console.warn("⚠️  WARNING: R2 credentials are incomplete in .dev.vars");
+    console.warn("    Image uploads will fail without R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, and R2_SECRET_ACCESS_KEY");
 }
