@@ -1,9 +1,8 @@
-<nav class="text-sm text-slate-400 mb-8 font-medium">
-    <a href="/" class="hover:text-teal-600">Home</a> /
+<nav class="text-sm text-teal-600 mb-8 font-medium">
+    <a href="/" class="hover:text-teal-700">Home</a> /
     {{ range .Page.Ancestors.Reverse }}
     {{ if not .IsHome }}
-    <a href="{{ .RelPermalink }}" class="hover:text-teal-600">{{ .LinkTitle }}</a> /
+    <a href="{{ .RelPermalink }}" class="hover:text-teal-700">{{ .LinkTitle }}</a> /
     {{ end }}
     {{ end }}
-    <span class="text-slate-600">{{ .LinkTitle }}</span>
 </nav>

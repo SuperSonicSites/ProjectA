@@ -5,12 +5,35 @@
     <div class="lg:w-[65%] bg-stone-100 flex items-center justify-center p-4 lg:p-12 relative">
         <div
             class="bg-white shadow-2xl p-4 lg:p-8 max-w-2xl w-full mx-auto transform hover:scale-[1.01] transition duration-500">
-            {{ if .Params.image_url }}
-            <img src="{{ .Params.image_url }}" alt="{{ .Title }}" class="w-full h-auto border border-slate-100">
+            {{ if .Params.cf_image_id }}
+                <!-- Cloudflare Images with responsive variants -->
+                <picture>
+                    <!-- Mobile: 600x800 -->
+                    <source 
+                        media="(max-width: 640px)"
+                        srcset="https://imagedelivery.net/{{ $.Site.Params.cf_images_hash }}/{{ .Params.cf_image_id }}/mobile"
+                    />
+                    <!-- Tablet: desktop variant -->
+                    <source 
+                        media="(max-width: 1024px)"
+                        srcset="https://imagedelivery.net/{{ $.Site.Params.cf_images_hash }}/{{ .Params.cf_image_id }}/desktop"
+                    />
+                    <!-- Desktop: 1200x1600 -->
+                    <img 
+                        src="https://imagedelivery.net/{{ $.Site.Params.cf_images_hash }}/{{ .Params.cf_image_id }}/desktop"
+                        alt="{{ .Title }}"
+                        loading="lazy"
+                        decoding="async"
+                        class="w-full h-auto border border-slate-100 bg-white"
+                    />
+                </picture>
+            {{ else if .Params.image_url }}
+                <!-- Fallback to R2 if CF Images not available -->
+                <img src="{{ .Params.image_url }}" alt="{{ .Title }}" class="w-full h-auto border border-slate-100 bg-white" loading="lazy">
             {{ else }}
-            <div class="aspect-[3/4] bg-slate-50 flex items-center justify-center text-slate-300 font-mono">
-                [High Res Image Placeholder]
-            </div>
+                <div class="aspect-[3/4] bg-slate-50 flex items-center justify-center text-slate-300 font-mono">
+                    [High Res Image Placeholder]
+                </div>
             {{ end }}
         </div>
     </div>
@@ -18,15 +41,30 @@
     <!-- RIGHT: Action Panel (35%) -->
     <div class="lg:w-[35%] bg-white p-6 lg:p-12 flex flex-col h-full lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto"
         data-pagefind-body>
+        {{/* Clean title for display - remove prefix and parentheticals */}}
+        {{ $cleanTitle := .Title }}
+        {{ $cleanTitle = replaceRE "^Cat Coloring Page:\\s*" "" $cleanTitle }}
+        {{ $cleanTitle = replaceRE "\\s*\\([^)]*\\)\\s*" "" $cleanTitle }}
+        {{ $cleanTitle = replaceRE "\\.\\s*$" "" $cleanTitle }}
+        
         <!-- Breadcrumbs -->
         <nav class="text-sm text-slate-400 mb-8 font-medium">
             <a href="/" class="hover:text-teal-600">Home</a> /
             {{ range .Page.Ancestors.Reverse }}
             <a href="{{ .RelPermalink }}" class="hover:text-teal-600">{{ .LinkTitle }}</a> /
             {{ end }}
+            <span class="text-slate-600">
+                {{ if gt (len $cleanTitle) 40 }}
+                    {{ $words := split $cleanTitle " " }}
+                    {{ $shortTitle := delimit (first 3 $words) " " }}
+                    {{ $shortTitle }}...
+                {{ else }}
+                    {{ $cleanTitle }}
+                {{ end }}
+            </span>
         </nav>
 
-        <h1 class="font-heading text-3xl lg:text-4xl font-bold text-slate-800 mb-4 leading-tight">{{ .Title }}</h1>
+        <h1 class="font-heading text-3xl lg:text-4xl font-bold text-slate-800 mb-4 leading-tight">{{ $cleanTitle }}</h1>
 
         <div class="flex gap-2 mb-8">
             <span class="px-3 py-1 bg-teal-50 text-teal-700 rounded-full text-sm font-bold">{{ .Params.difficulty
@@ -36,19 +74,21 @@
         </div>
 
         <p class="text-slate-600 leading-relaxed mb-8">
-            Create your masterpiece with this {{ .Params.style }} coloring page. optimized for A4 and Letter printing.
+            Create your masterpiece with this {{ .Params.collections }} coloring page. optimized for A4 and Letter printing.
             Perfect for {{ .Params.medium | default "markers" }}.
         </p>
 
         <!-- Desktop Action (Hidden on Mobile) -->
         <div class="hidden md:block space-y-4 mb-12">
-            <a href="{{ .Params.download_url }}" download
-                class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg transform transition hover:-translate-y-1 flex items-center justify-center gap-3 text-lg">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <a href="{{ .Params.r2_original }}" 
+               download="{{ $cleanTitle | urlize }}.png"
+               aria-label="Download {{ $cleanTitle }} as printable PNG"
+               class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg transform transition hover:-translate-y-1 flex items-center justify-center gap-3 text-lg">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
                 </svg>
-                Download PDF (Printable)
+                Download Printable
             </a>
             <p class="text-center text-xs text-slate-400">Free for personal use only.</p>
         </div>
@@ -81,9 +121,15 @@
 
 <!-- Mobile Sticky Action Deck -->
 <div class="action-deck md:hidden fixed bottom-4 left-4 right-4 z-50">
-    <a href="{{ .Params.download_url }}" download
-        class="w-full bg-teal-600 text-white font-bold py-4 rounded-xl shadow-2xl flex items-center justify-center gap-2 text-lg border border-teal-400">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    {{ $cleanTitle := .Title }}
+    {{ $cleanTitle = replaceRE "^Cat Coloring Page:\\s*" "" $cleanTitle }}
+    {{ $cleanTitle = replaceRE "\\s*\\([^)]*\\)\\s*" "" $cleanTitle }}
+    {{ $cleanTitle = replaceRE "\\.\\s*$" "" $cleanTitle }}
+    <a href="{{ .Params.r2_original }}" 
+       download="{{ $cleanTitle | urlize }}.png"
+       aria-label="Download {{ $cleanTitle }} as printable PNG"
+       class="w-full bg-teal-600 text-white font-bold py-4 rounded-xl shadow-2xl flex items-center justify-center gap-2 text-lg border border-teal-400">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
         </svg>

@@ -1,4 +1,4 @@
-<header class="bg-white shadow-sm sticky top-0 z-50" x-data="{ mobileMenuOpen: false }">
+<header class="bg-white shadow-sm sticky top-0 z-50" x-data="{ mobileMenuOpen: false }" role="banner">
     <div class="container mx-auto px-4 py-4 flex justify-between items-center relative">
         <!-- Logo -->
         <a href="/" class="text-2xl font-bold font-heading text-slate-800 tracking-tighter">
@@ -12,7 +12,7 @@
         </div>
 
         <!-- Meta Nav -->
-        <nav class="hidden md:flex gap-6 text-slate-600 font-medium items-center">
+        <nav class="hidden md:flex gap-6 text-slate-600 font-medium items-center" role="navigation" aria-label="Main navigation">
             <a href="/" class="hover:text-teal-600">Home</a>
             <a href="/about/" class="hover:text-teal-600">About</a>
 
@@ -36,7 +36,7 @@
                     class="absolute left-0 mt-0 w-48 bg-white rounded-lg shadow-xl border border-slate-100 py-2 z-50"
                     style="display: none;">
                     {{ range $name, $taxonomy := .Site.Taxonomies.categories }}
-                    <a href="{{ " /categories/" | relLangURL }}{{ $name | urlize }}"
+                    <a href="/{{ $name | urlize }}/"
                         class="block px-4 py-2 hover:bg-slate-50 hover:text-teal-600 capitalize">
                         {{ $name | humanize }}
                     </a>
@@ -48,15 +48,20 @@
         </nav>
 
         <!-- Mobile Menu Icon -->
-        <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden text-slate-800 focus:outline-none">
+        <button 
+            @click="mobileMenuOpen = !mobileMenuOpen" 
+            class="md:hidden text-slate-800 focus:outline-none"
+            :aria-label="mobileMenuOpen ? 'Close menu' : 'Open menu'"
+            aria-expanded="false"
+            x-bind:aria-expanded="mobileMenuOpen">
             <!-- Hamburger Icon -->
-            <svg x-show="!mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg x-show="!mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
                 </path>
             </svg>
             <!-- Close Icon -->
             <svg x-show="mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                style="display: none;">
+                style="display: none;" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
         </button>
@@ -95,7 +100,7 @@
                 <div x-show="categoriesOpen" class="pl-4 mt-2 flex flex-col gap-3 border-l-2 border-slate-100 ml-1"
                     style="display: none;">
                     {{ range $name, $taxonomy := .Site.Taxonomies.categories }}
-                    <a href="{{ " /categories/" | relLangURL }}{{ $name | urlize }}"
+                    <a href="/{{ $name | urlize }}/"
                         class="text-slate-600 hover:text-teal-600 capitalize">
                         {{ $name | humanize }}
                     </a>

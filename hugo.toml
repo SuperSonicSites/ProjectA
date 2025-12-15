@@ -5,6 +5,7 @@ theme = 'visual-sanctuary-theme'
 
 [params]
   description = "Discover the best free printable coloring pages for adults and kids. High-quality animals, mandalas, and more."
+  cf_images_hash = "G92SwfasiUv-usR1s4VYvA"  # Cloudflare Images account hash
 
 # GA4 Integration
 googleAnalytics = "G-R0NHTPYWFY"
@@ -12,6 +13,34 @@ googleAnalytics = "G-R0NHTPYWFY"
 [taxonomies]
   category = "categories"  # Silo (Animals)
   series = "collections"   # Sub-Silo (Cats)
+
+[related]
+  includeNewer = true
+  threshold = 80
+  toLower = false
+
+  [[related.indices]]
+    name = "collections"
+    weight = 100
+  
+  [[related.indices]]
+    name = "categories"
+    weight = 80
+  
+  [[related.indices]]
+    name = "tags"
+    weight = 50
+  
+  [[related.indices]]
+    name = "difficulty"
+    weight = 30
+  
+  [[related.indices]]
+    name = "style"
+    weight = 20
+
+[permalinks]
+  coloring-pages = "/:sections/:slug/"
 
 
 

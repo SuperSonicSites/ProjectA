@@ -21,7 +21,7 @@
         <!-- Breadcrumbs -->
         {{ partial "breadcrumbs.html" . }}
 
-        <h1 class="font-heading text-3xl lg:text-4xl font-bold text-slate-800 mb-4 leading-tight">{{ .Title }}</h1>
+        <h1 class="font-heading text-3xl lg:text-4xl font-bold text-slate-800 mb-4 leading-tight">{{ .Title | title }}</h1>
 
         <div class="flex gap-2 mb-8">
             <span class="px-3 py-1 bg-teal-50 text-teal-700 rounded-full text-sm font-bold">{{ .Params.difficulty
@@ -31,20 +31,22 @@
         </div>
 
         <p class="text-slate-600 leading-relaxed mb-8">
-            Create your masterpiece with this {{ .Params.style }} coloring page. optimized for A4 and Letter printing.
-            Perfect for {{ .Params.medium | default "markers" }}.
+            {{ .Description }}.
         </p>
 
         <!-- Desktop Action (Hidden on Mobile) -->
         <div class="hidden md:block space-y-4 mb-12">
-            <a href="{{ .Params.download_url }}" download
-                class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg transform transition hover:-translate-y-1 flex items-center justify-center gap-3 text-lg">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <button 
+               data-download-url="{{ .Params.r2_original }}"
+               data-filename="{{ .Title | urlize }}.png"
+               aria-label="Download {{ .Title }} as printable PNG"
+               class="download-btn w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg transform transition hover:-translate-y-1 flex items-center justify-center gap-3 text-lg cursor-pointer">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
                 </svg>
-                Download PDF (Printable)
-            </a>
+                <span class="download-text">Download Printable</span>
+            </button>
             <p class="text-center text-xs text-slate-400">Free for personal use only.</p>
         </div>
 
@@ -76,13 +78,70 @@
 
 <!-- Mobile Sticky Action Deck -->
 <div class="action-deck md:hidden fixed bottom-4 left-4 right-4 z-50">
-    <a href="{{ .Params.download_url }}" download
-        class="w-full bg-teal-600 text-white font-bold py-4 rounded-xl shadow-2xl flex items-center justify-center gap-2 text-lg border border-teal-400">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <button 
+       data-download-url="{{ .Params.r2_original }}"
+       data-filename="{{ .Title | urlize }}.png"
+       aria-label="Download {{ .Title }} as printable PNG"
+       class="download-btn w-full bg-teal-600 text-white font-bold py-4 rounded-xl shadow-2xl flex items-center justify-center gap-2 text-lg border border-teal-400 cursor-pointer">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
         </svg>
-        DOWNLOAD
-    </a>
+        <span class="download-text">DOWNLOAD</span>
+    </button>
 </div>
+
+<!-- Force Download Script -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const downloadButtons = document.querySelectorAll('.download-btn');
+    
+    downloadButtons.forEach(button => {
+        button.addEventListener('click', async function(e) {
+            e.preventDefault();
+            
+            const url = this.getAttribute('data-download-url');
+            const filename = this.getAttribute('data-filename');
+            const textElement = this.querySelector('.download-text');
+            const originalText = textElement.textContent;
+            
+            try {
+                // Show loading state
+                textElement.textContent = 'Downloading...';
+                this.disabled = true;
+                
+                // Fetch the image
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Download failed');
+                
+                // Convert to blob
+                const blob = await response.blob();
+                
+                // Create download link
+                const downloadUrl = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = downloadUrl;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                
+                // Cleanup
+                window.URL.revokeObjectURL(downloadUrl);
+                document.body.removeChild(a);
+                
+                // Reset button state
+                textElement.textContent = originalText;
+                this.disabled = false;
+            } catch (error) {
+                console.error('Download error:', error);
+                textElement.textContent = 'Download Failed - Try Again';
+                setTimeout(() => {
+                    textElement.textContent = originalText;
+                    this.disabled = false;
+                }, 2000);
+            }
+        });
+    });
+});
+</script>
 {{ end }}

@@ -1,6 +1,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
+{{- if .IsHome -}}
+  <title>{{ .Site.Title }}</title>
+{{- else if eq .Type "coloring-pages" -}}
+  {{/* For coloring pages, add "Coloring Page" for SEO */}}
+  {{ $cleanTitle := .Title }}
+  {{ $cleanTitle = replaceRE "^Cat Coloring Page:\\s*" "" $cleanTitle }}
+  {{ $cleanTitle = replaceRE "\\s*\\([^)]*\\)\\s*" "" $cleanTitle }}
+  {{ $cleanTitle = replaceRE "\\.\\s*$" "" $cleanTitle }}
+  <title>{{ $cleanTitle }} Coloring Page - PaperPause</title>
+{{- else -}}
+  <title>{{ .Title }} - PaperPause</title>
+{{- end -}}
 <meta name="description"
     content="{{ if .Description }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}">
 <link rel="canonical" href="{{ .Permalink }}" />
@@ -12,8 +23,13 @@
 {{ $desc := .Description }}
 {{ if not $desc }}{{ $desc = .Site.Params.description }}{{ end }}
 
+{{/* Image for OpenGraph/Twitter - Use CF Images RSS variant (1000x1500 for Pinterest) */}}
 {{ $image := "/images/og-default.jpg" | absURL }}
-{{ if .Params.image_url }}{{ $image = .Params.image_url | absURL }}{{ end }}
+{{ if .Params.cf_image_id }}
+  {{ $image = printf "https://imagedelivery.net/%s/%s/rss" $.Site.Params.cf_images_hash .Params.cf_image_id }}
+{{ else if .Params.image_url }}
+  {{ $image = .Params.image_url | absURL }}
+{{ end }}
 
 <!-- Open Graph -->
 <meta property="og:title" content="{{ $title }}" />
@@ -21,6 +37,11 @@
 <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}" />
 <meta property="og:url" content="{{ .Permalink }}" />
 <meta property="og:image" content="{{ $image }}" />
+{{ if .Params.cf_image_id }}
+<meta property="og:image:width" content="1000" />
+<meta property="og:image:height" content="1500" />
+<meta property="og:image:type" content="image/png" />
+{{ end }}
 <meta property="og:site_name" content="{{ .Site.Title }}" />
 
 <!-- Twitter -->
@@ -28,6 +49,9 @@
 <meta name="twitter:title" content="{{ $title }}" />
 <meta name="twitter:description" content="{{ $desc }}" />
 <meta name="twitter:image" content="{{ $image }}" />
+{{ if .Params.cf_image_id }}
+<meta name="twitter:image:alt" content="{{ $title }}" />
+{{ end }}
 
 <!-- Schema.org JSON-LD -->
 {{ partial "seo/schema.html" . }}

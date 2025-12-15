@@ -39,9 +39,15 @@
                     <a href="{{ .RelPermalink }}"
                         class="block group bg-white rounded-xl shadow-sm hover:shadow-lg transition overflow-hidden">
                         <div class="relative bg-white aspect-[3/4]">
-                            <!-- Use Imgix/R2 placeholder logic if real image exists -->
-                            {{ if .Params.image_url }}
-                            <img src="{{ .Params.image_url }}" alt="{{ .Title }}" class="w-full h-full object-contain">
+                            <!-- Use CF Images thumbnail variant for fast loading -->
+                            {{ if .Params.cf_image_id }}
+                            <img 
+                                src="https://imagedelivery.net/{{ $.Site.Params.cf_images_hash }}/{{ .Params.cf_image_id }}/thumbnail" 
+                                alt="{{ .Title }}" 
+                                class="w-full h-full object-contain"
+                                loading="lazy">
+                            {{ else if .Params.image_url }}
+                            <img src="{{ .Params.image_url }}" alt="{{ .Title }}" class="w-full h-full object-contain" loading="lazy">
                             {{ else }}
                             <div class="w-full h-full bg-slate-50 flex items-center justify-center text-slate-300">No
                                 Image</div>

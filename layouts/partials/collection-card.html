@@ -1,0 +1,69 @@
+{{- /*
+  Collection Card with Pinterest-style Image Collage
+  Usage: {{ partial "collection-card.html" . }}
+  Expects a section/page context
+*/ -}}
+
+{{- $section := . -}}
+{{- $allPages := $section.Pages -}}
+{{- $images := slice -}}
+
+{{- /* Collect last 2 images (static) from pages */ -}}
+{{- range last 2 $allPages -}}
+  {{- if or .Params.image_url .Params.cf_image_id -}}
+    {{- $imageData := dict "url" "" "cf_id" .Params.cf_image_id "alt" .Title -}}
+    {{- if .Params.cf_image_id -}}
+      {{- $imageData = merge $imageData (dict "url" (printf "https://imagedelivery.net/%s/%s/thumbnail" (default "G92SwfasiUv-usR1s4VYvA" $.Site.Params.cf_images_hash) .Params.cf_image_id)) -}}
+    {{- else if .Params.image_url -}}
+      {{- $imageData = merge $imageData (dict "url" .Params.image_url) -}}
+    {{- end -}}
+    {{- $images = $images | append $imageData -}}
+  {{- end -}}
+{{- end -}}
+
+<a href="{{ $section.RelPermalink }}"
+    class="group block bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-slate-100">
+    
+    {{- /* Container sized for 2 images with 2:3 aspect ratio each, side by side = 4:3 total */ -}}
+    <div class="aspect-[4/3] bg-slate-100 relative overflow-hidden">
+        {{- if eq (len $images) 0 -}}
+            {{- /* No images found - check for frontmatter image_url or show placeholder */ -}}
+            {{- if $section.Params.image_url -}}
+                <img src="{{ $section.Params.image_url }}" alt="{{ $section.Title }}" class="w-full h-full object-cover">
+            {{- else -}}
+                {{- /* Placeholder grid pattern */ -}}
+                <div class="grid grid-cols-2 gap-0.5 h-full">
+                    <div class="bg-teal-50"></div>
+                    <div class="bg-teal-100"></div>
+                    <div class="bg-teal-100"></div>
+                    <div class="bg-teal-50"></div>
+                </div>
+            {{- end -}}
+        {{- else if ge (len $images) 1 -}}
+            {{- /* Show last 2 images side by side (or just 1 if only 1 available) */ -}}
+            <div class="grid grid-cols-2 gap-1 h-full">
+                {{- range first 2 $images -}}
+                    <div class="w-full h-full aspect-[2/3]">
+                        <img src="{{ .url }}" 
+                             alt="{{ .alt }}" 
+                             class="w-full h-full object-cover" 
+                             loading="lazy">
+                    </div>
+                {{- end -}}
+            </div>
+        {{- end -}}
+        
+        {{- /* Hover overlay */ -}}
+        <div class="absolute inset-0 flex items-center justify-center bg-black/5 opacity-0 group-hover:opacity-100 transition">
+            <span class="bg-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">Browse {{ $section.Title }}</span>
+        </div>
+    </div>
+    
+    <div class="p-6">
+        <h3 class="font-heading text-xl font-bold group-hover:text-teal-600 transition">
+            {{ $section.Title }}
+        </h3>
+        <p class="text-slate-500 text-sm mt-1">{{ len $section.Pages }} {{ if eq (len $section.Pages) 1 }}Page{{ else }}Pages{{ end }}</p>
+    </div>
+</a>
+

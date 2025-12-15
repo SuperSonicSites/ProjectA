@@ -5,8 +5,18 @@
   "scripts": {
     "dev": "npm run build:css && hugo server --disableFastRender",
     "build:css": "tailwindcss -i ./themes/visual-sanctuary-theme/assets/css/main.css -o ./static/css/main.css --minify",
-    "build": "npm run build:css && hugo --minify && npx pagefind --site public",
-    "preview": "npm run build && npx wrangler pages dev public"
+    "build:hugo": "hugo --minify",
+    "build:search": "npx pagefind --site public",
+    "build": "npm run build:css && npm run build:hugo && npm run build:search",
+    "preview": "npm run build && npx wrangler pages dev public",
+    "dashboard": "ts-node scripts/morning-routine/dashboard/server.ts",
+    "generate": "ts-node scripts/morning-routine/tasks/generate-batch.ts",
+    "generate:batch": "ts-node scripts/morning-routine/tasks/generate-batch.ts",
+    "lint": "hugo --printPathWarnings --printMemoryUsage",
+    "validate:env": "ts-node scripts/validate-env.ts",
+    "validate:taxonomy": "ts-node scripts/validate-taxonomy.ts",
+    "validate": "npm run validate:env && npm run validate:taxonomy",
+    "clean": "rm -rf public resources"
   },
   "dependencies": {
     "alpinejs": "^3.13.3",
@@ -18,13 +28,19 @@
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.948.0",
     "@google/generative-ai": "^0.24.1",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/fs-extra": "^11.0.4",
+    "@types/glob": "^8.1.0",
+    "@types/node": "^25.0.2",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "fs-extra": "^11.3.2",
     "glob": "^13.0.0",
-    "matter-js": "^0.20.0",
+    "gray-matter": "^4.0.3",
     "pagefind": "^1.4.0",
+    "sharp": "^0.33.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }

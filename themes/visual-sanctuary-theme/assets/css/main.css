@@ -2,6 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Accessibility: Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Focus styles for keyboard navigation */
+*:focus-visible {
+  @apply outline-2 outline-offset-2 outline-teal-600;
+}
+
+button:focus-visible,
+a:focus-visible {
+  @apply ring-2 ring-teal-600 ring-offset-2 rounded;
+}
+
 @layer utilities {
   .masonry-grid {
     column-count: 2;
