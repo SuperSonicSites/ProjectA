@@ -1,0 +1,59 @@
+{
+  "collection": "Dogs",
+  "category": "animals",
+  "base": "Charming cartoon-style black and white line art coloring page with engaging environment.\n\nSTYLE: Adorable cartoon character in detailed, cozy setting. Children's book illustration style.\n\nLINE REQUIREMENTS - VERY IMPORTANT:\n- THICK BOLD MARKER-LIKE LINES: Very thick 6-8pt line weight throughout entire image\n- MARKER STYLE: Bold, thick outlines like drawn with a thick marker or Sharpie\n- OUTLINES ONLY: Black outlines defining all shapes. NO filled black areas\n- Consistent bold line weight everywhere - no thin or delicate lines\n- Pure white background\n\nCOMPOSITION:\n- Character doing an activity in a detailed environment\n- Include relevant props and background elements that tell a story\n- Create warm, inviting, comfortable atmosphere\n- Evoke emotions of comfort, fun, coziness\n\nSUBJECT: An adorable cartoon Dog.",
+  "negative_prompt": "realistic, photorealistic, detailed fur, realistic textures, thin lines, fine lines, hairline, delicate lines, transparent background, transparency, color, shading, gray, gradient, photo, 3d, rendering, text, signature, watermark, blurry, broken lines, sketch, messy, horizontal orientation, landscape, filled areas, solid colors, filled black areas, black shapes, solid black, black fill, dark areas, shadows, black spots, filled spaces, decorative borders, ornate frames, complex patterns, mandala patterns, intricate details, busy background, square format, 1:1 ratio, wide image, horizontal image",
+  "attributes": {
+    "tones": [
+      "Cozy",
+      "Playful",
+      "Sleepy",
+      "Elegant",
+      "Curious",
+      "Zen",
+      "Cartoon"
+    ],
+    "types": [
+      "Labrador",
+      "Golden Doodle",
+      "Golden Retriever",
+      "Poodle",
+      "French Bulldog",
+      "Beagle",
+      "German Shepherd",
+      "Dachshund",
+      "Yorkshire Terrier",
+      "Corgi",
+      "Shih Tzu",
+      "Pomeranian",
+      "Havanese",
+      "Chihuahua",
+      "Pug",
+      "West Highland White Terrier",
+      "Shiba Inu",
+      "Dalmatian"
+    ],
+    "actions": [
+      "napping",
+      "reading",
+      "painting",
+      "playing",
+      "smiling",
+      "resting",
+      "sitting",
+      "howling"
+    ],
+    "settings": [
+      "home",
+      "garden",
+      "library",
+      "kitchen",
+      "studio",
+      "beach",
+      "appartment",
+      "cottagecore",
+      "outside porch"
+    ],
+    "details": []
+  }
+}

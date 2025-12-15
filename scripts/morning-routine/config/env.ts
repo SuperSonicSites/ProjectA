@@ -7,7 +7,7 @@ dotenv.config({ path: path.resolve(__dirname, '../../../.dev.vars') });
 
 export const ENV = {
     GEMINI_API_KEY: process.env.GEMINI_API_KEY || '',
-    GEMINI_MODEL: 'gemini-3-pro-image-preview',
+    GEMINI_MODEL: 'gemini-2.5-flash-image',
 
     R2: {
         ACCOUNT_ID: process.env.R2_ACCOUNT_ID || '',

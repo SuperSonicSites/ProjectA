@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Content CMS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="//unpkg.com/alpinejs" defer></script>
+</head>
+
+<body class="bg-gradient-to-br from-gray-50 to-gray-100" x-data="cms()" x-init="init()">
+  <!-- Header -->
+  <header class="bg-white shadow-sm border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-6 py-4">
+      <div class="flex justify-between items-center">
+        <h1 class="text-3xl font-bold text-gray-800">🎨 Content CMS</h1>
+        <div class="flex items-center gap-4">
+          <span class="text-sm text-gray-600" x-show="isGenerating" x-cloak>
+            <span class="inline-block animate-spin mr-2">⚙️</span>
+            Generating...
+          </span>
+          <div id="notification" x-show="notification" x-transition
+            class="fixed top-4 right-4 bg-indigo-600 text-white px-6 py-3 rounded-lg shadow-lg max-w-sm"
+            x-text="notification"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Tab Navigation -->
+  <nav class="bg-white border-b border-gray-200 sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex gap-8">
+        <button @click="activeTab = 'create'"
+          :class="activeTab === 'create' ? 'border-b-2 border-indigo-600 text-indigo-600' : 'text-gray-600 hover:text-gray-800'"
+          class="py-4 px-1 font-medium text-sm transition">
+          ➕ Create
+        </button>
+        <button @click="activeTab = 'edit'"
+          :class="activeTab === 'edit' ? 'border-b-2 border-indigo-600 text-indigo-600' : 'text-gray-600 hover:text-gray-800'"
+          class="py-4 px-1 font-medium text-sm transition">
+          ✏️ Edit
+        </button>
+        <button @click="activeTab = 'prompts'"
+          :class="activeTab === 'prompts' ? 'border-b-2 border-indigo-600 text-indigo-600' : 'text-gray-600 hover:text-gray-800'"
+          class="py-4 px-1 font-medium text-sm transition">
+          💬 Prompts
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-6 py-8">
+
+    <!-- CREATE TAB -->
+    <div x-show="activeTab === 'create'" x-cloak class="space-y-8">
+      <!-- Action Buttons -->
+      <div class="flex gap-4">
+        <button @click="showNewCategoryModal = true"
+          class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition shadow">
+          ➕ New Category
+        </button>
+        <button @click="showNewCollectionModal = true"
+          class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition shadow">
+          ➕ New Collection
+        </button>
+      </div>
+
+      <!-- Categories Grid -->
+      <div>
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Categories</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <template x-for="category in categories" :key="category.name">
+            <button @click="selectedCategory = category.name"
+              :class="selectedCategory === category.name ? 'ring-2 ring-indigo-600' : 'hover:shadow-md'"
+              class="bg-white rounded-lg p-6 text-center transition shadow">
+              <div class="text-4xl mb-2">📁</div>
+              <h3 class="font-bold text-lg text-gray-800" x-text="category.name"></h3>
+              <p class="text-sm text-gray-600" x-text="`${category.collectionCount} collections`"></p>
+            </button>
+          </template>
+        </div>
+      </div>
+
+      <!-- Collections Grid -->
+      <div x-show="selectedCategory">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">
+          Collections in <span x-text="selectedCategory" class="text-indigo-600"></span>
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <template x-for="collection in getCollectionsForCategory()" :key="collection.name">
+            <div class="bg-white rounded-lg shadow overflow-hidden flex flex-col hover:shadow-lg transition">
+              <div class="bg-gradient-to-r from-indigo-500 to-indigo-600 h-24 flex items-center justify-center">
+                <span class="text-5xl">📚</span>
+              </div>
+              <div class="p-4 flex-1 flex flex-col">
+                <h3 class="font-bold text-lg text-gray-800 mb-2" x-text="collection.name"></h3>
+                <p class="text-sm text-gray-600 mb-4" x-text="collection.metadata.description || 'No description'"></p>
+                <div class="flex gap-2 text-xs text-gray-600 mb-4 flex-1">
+                  <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded" x-text="`${collection.draftCount} drafts`"></span>
+                  <span class="bg-green-50 text-green-700 px-3 py-1 rounded" x-text="`${collection.publishedCount} published`"></span>
+                </div>
+                <button @click="generateForCollection(collection)"
+                  :disabled="isGenerating"
+                  class="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-400 text-white px-4 py-2 rounded font-medium transition">
+                  🚀 Generate
+                </button>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <!-- EDIT TAB -->
+    <div x-show="activeTab === 'edit'" x-cloak class="space-y-6">
+      <!-- Filters -->
+      <div class="bg-white rounded-lg p-6 shadow">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+            <select x-model="editFilters.category" @change="refreshEditContent()"
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-800">
+              <option value="">All Categories</option>
+              <template x-for="category in categories" :key="category.name">
+                <option :value="category.name" x-text="category.name"></option>
+              </template>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Collection</label>
+            <select x-model="editFilters.collection" @change="refreshEditContent()"
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-800">
+              <option value="">All Collections</option>
+              <template x-for="collection in getEditCollections()" :key="collection.name">
+                <option :value="collection.name" x-text="collection.name"></option>
+              </template>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+            <select x-model="editFilters.status" @change="refreshEditContent()"
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-800">
+              <option value="">All</option>
+              <option value="draft">Drafts Only</option>
+              <option value="published">Published Only</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content Grid -->
+      <div x-show="editContent.length === 0" class="text-center py-12 text-gray-500">
+        <p class="text-lg">No content found. Try adjusting your filters.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <template x-for="item in editContent" :key="item.filename">
+          <div class="bg-white rounded-lg shadow overflow-hidden hover:shadow-lg transition">
+            <div class="aspect-[3/4] bg-gray-200 relative">
+              <img :src="item.frontmatter.image_url" class="w-full h-full object-cover" :alt="item.frontmatter.title">
+              <span :class="item.draft ? 'bg-yellow-400' : 'bg-green-400'"
+                class="absolute top-2 right-2 text-xs font-bold px-3 py-1 rounded text-white"
+                x-text="item.draft ? 'DRAFT' : 'LIVE'"></span>
+            </div>
+            <div class="p-4">
+              <h3 class="font-bold text-gray-800 mb-1 truncate" x-text="item.frontmatter.title"></h3>
+              <p class="text-xs text-gray-600 mb-4 line-clamp-2" x-text="item.frontmatter.prompt || item.frontmatter.description"></p>
+              <button @click="editingFile = item; showEditModal = true"
+                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded font-medium transition">
+                ✏️ Edit Frontmatter
+              </button>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+
+    <!-- PROMPTS TAB -->
+    <div x-show="activeTab === 'prompts'" x-cloak class="space-y-6">
+      <!-- Collection Selector -->
+      <div class="bg-white rounded-lg p-6 shadow">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Select Collection</label>
+        <select x-model="selectedPromptCollection" @change="loadPromptConfig()"
+          class="w-full md:w-64 border border-gray-300 rounded-lg px-3 py-2 text-gray-800">
+          <option value="">Choose a collection...</option>
+          <template x-for="collection in getAllCollections()" :key="`${collection.category}-${collection.name}`">
+            <option :value="`${collection.category}/${collection.name}`"
+              x-text="`${collection.category} > ${collection.name}`"></option>
+          </template>
+        </select>
+      </div>
+
+      <!-- Prompt Editor -->
+      <div x-show="currentPromptConfig" class="space-y-6">
+        <!-- Base Prompt -->
+        <div class="bg-white rounded-lg p-6 shadow">
+          <h3 class="text-lg font-bold text-gray-800 mb-4">Base Prompt</h3>
+          <textarea x-model="currentPromptConfig.base"
+            class="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-800 font-mono text-sm h-32"
+            placeholder="Enter base prompt..."></textarea>
+        </div>
+
+        <!-- Negative Prompt -->
+        <div class="bg-white rounded-lg p-6 shadow">
+          <h3 class="text-lg font-bold text-gray-800 mb-4">Negative Prompt</h3>
+          <textarea x-model="currentPromptConfig.negative_prompt"
+            class="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-800 font-mono text-sm h-24"
+            placeholder="Enter negative prompt..."></textarea>
+        </div>
+
+        <!-- Attributes -->
+        <div class="space-y-6">
+          <template x-for="(attributeArray, attributeName) in currentPromptConfig.attributes" :key="attributeName">
+            <div class="bg-white rounded-lg p-6 shadow">
+              <h3 class="text-lg font-bold text-gray-800 mb-4 capitalize" x-text="attributeName"></h3>
+              <div class="flex flex-wrap gap-2 mb-4">
+                <template x-for="(item, index) in attributeArray" :key="index">
+                  <div class="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full flex items-center gap-2">
+                    <span x-text="item"></span>
+                    <button @click="removeAttribute(attributeName, index)"
+                      class="font-bold hover:text-red-600 transition">
+                      ✕
+                    </button>
+                  </div>
+                </template>
+              </div>
+              <div class="flex gap-2">
+                <input type="text" x-model="newAttributeValue[attributeName]"
+                  @keydown.enter="addAttribute(attributeName)"
+                  class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-gray-800"
+                  placeholder="Add new item...">
+                <button @click="addAttribute(attributeName)"
+                  class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition">
+                  ➕ Add
+                </button>
+              </div>
+            </div>
+          </template>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-4">
+          <button @click="savePromptConfig()"
+            class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition shadow">
+            💾 Save Changes
+          </button>
+          <button @click="testGenerateOne()"
+            :disabled="isGenerating"
+            class="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-6 py-2 rounded-lg font-medium transition shadow">
+            🧪 Test Generate (1 image)
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- MODALS -->
+
+  <!-- New Category Modal -->
+  <div x-show="showNewCategoryModal" @click.self="showNewCategoryModal = false"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4" @click.stop>
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">Create New Category</h2>
+      <div class="space-y-4 mb-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Category Name</label>
+          <input type="text" x-model="newCategory.name"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-800"
+            placeholder="e.g., animals, nature, objects">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Title</label>
+          <input type="text" x-model="newCategory.metadata.title"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-800"
+            placeholder="Display title">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+          <textarea x-model="newCategory.metadata.description"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-800 h-24"
+            placeholder="Category description..."></textarea>
+        </div>
+      </div>
+      <div class="flex gap-3">
+        <button @click="createNewCategory()"
+          class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition">
+          Create
+        </button>
+        <button @click="showNewCategoryModal = false"
+          class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg font-medium transition">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- New Collection Modal -->
+  <div x-show="showNewCollectionModal" @click.self="showNewCollectionModal = false"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto" @click.stop>
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">Create New Collection</h2>
+      <div class="space-y-4 mb-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+          <select x-model="newCollection.category"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-800">
+            <option value="">Select category...</option>
+            <template x-for="category in categories" :key="category.name">
+              <option :value="category.name" x-text="category.name"></option>
+            </template>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Collection Name</label>
+          <input type="text" x-model="newCollection.name"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-800"
+            placeholder="e.g., cats, dogs, flowers">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Title</label>
+          <input type="text" x-model="newCollection.metadata.title"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-800">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">H1 Heading</label>
+          <input type="text" x-model="newCollection.metadata.h1"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-800">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+          <textarea x-model="newCollection.metadata.description"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-800 h-20"
+            placeholder="Collection description..."></textarea>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Image URL</label>
+          <input type="text" x-model="newCollection.metadata.image_url"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-800"
+            placeholder="https://...">
+        </div>
+        <div class="border-t pt-4">
+          <h4 class="font-medium text-gray-800 mb-3">Generation Settings</h4>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Batch Size</label>
+              <input type="number" x-model.number="newCollection.metadata.cms_batch_size" min="1" max="20"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-800">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Difficulty</label>
+              <input type="text" x-model="newCollection.metadata.cms_frontmatter_template.difficulty"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-800"
+                placeholder="Easy, Medium, Hard">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Style</label>
+              <input type="text" x-model="newCollection.metadata.cms_frontmatter_template.style"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-800"
+                placeholder="Bold, Detailed, etc.">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Medium</label>
+              <input type="text" x-model="newCollection.metadata.cms_frontmatter_template.medium"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-800"
+                placeholder="Markers, Pencils, etc.">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex gap-3">
+        <button @click="createNewCollection()"
+          class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition">
+          Create
+        </button>
+        <button @click="showNewCollectionModal = false"
+          class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg font-medium transition">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Frontmatter Modal -->
+  <div x-show="showEditModal" @click.self="showEditModal = false"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto" @click.stop>
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">Edit Frontmatter</h2>
+
+      <div x-show="editingFile" class="space-y-4 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Title</label>
+            <input type="text" x-model="editingFile.frontmatter.title"
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-800">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Type</label>
+            <input type="text" x-model="editingFile.frontmatter.type"
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-800">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+          <textarea x-model="editingFile.frontmatter.description"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-800 h-20"></textarea>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Difficulty</label>
+            <input type="text" x-model="editingFile.frontmatter.difficulty"
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-800">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Style</label>
+            <input type="text" x-model="editingFile.frontmatter.style"
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-800">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Medium</label>
+            <input type="text" x-model="editingFile.frontmatter.medium"
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-800">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Image URL</label>
+          <input type="text" x-model="editingFile.frontmatter.image_url"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-800 font-mono text-xs">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Prompt/Notes</label>
+          <textarea x-model="editingFile.frontmatter.prompt"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-800 h-16"></textarea>
+        </div>
+
+        <div class="flex items-center">
+          <input type="checkbox" x-model="editingFile.frontmatter.draft" id="draftCheck"
+            class="h-4 w-4 text-indigo-600 rounded">
+          <label for="draftCheck" class="ml-2 text-sm text-gray-700">Mark as Draft</label>
+        </div>
+      </div>
+
+      <div class="flex gap-3">
+        <button @click="saveEditingFile()"
+          class="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition">
+          💾 Save Changes
+        </button>
+        <button @click="approveEditingFile()" x-show="editingFile && editingFile.draft"
+          class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition">
+          ✅ Approve (Publish)
+        </button>
+        <button @click="deleteEditingFile()"
+          class="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition">
+          🗑️ Delete
+        </button>
+        <button @click="showEditModal = false"
+          class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg font-medium transition">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Generation Modal -->
+  <div x-show="showGenerationModal" @click.self="showGenerationModal = false"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4" @click.stop>
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">Generate Images</h2>
+      <div x-show="generatingCollection" class="space-y-4 mb-6">
+        <p class="text-gray-700">
+          Collection: <strong x-text="generatingCollection.category + ' > ' + generatingCollection.name"></strong>
+        </p>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Number of Images</label>
+          <input type="number" x-model.number="generationCount" min="1" max="20" value="5"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-800">
+        </div>
+        <p class="text-sm text-gray-600 bg-blue-50 px-3 py-2 rounded">
+          Batch size: <span x-text="generatingCollection.metadata.cms_batch_size || 5"></span> (from collection settings)
+        </p>
+      </div>
+      <div class="flex gap-3">
+        <button @click="startGeneration()"
+          :disabled="isGenerating"
+          class="flex-1 bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg font-medium transition">
+          🚀 Generate
+        </button>
+        <button @click="showGenerationModal = false"
+          class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg font-medium transition">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('alpine:init', () => {
+      Alpine.data('cms', () => ({
+        activeTab: 'create',
+        categories: [],
+        allCollections: [],
+        editContent: [],
+        isGenerating: false,
+        notification: '',
+
+        // Create Tab
+        selectedCategory: '',
+        showNewCategoryModal: false,
+        showNewCollectionModal: false,
+        newCategory: { name: '', metadata: { title: '', description: '', image_url: '' } },
+        newCollection: {
+          category: '',
+          name: '',
+          metadata: {
+            title: '',
+            h1: '',
+            description: '',
+            image_url: '',
+            cms_batch_size: 5,
+            cms_frontmatter_template: {
+              type: 'coloring-pages',
+              difficulty: 'Easy',
+              style: 'Bold',
+              medium: 'Markers'
+            }
+          }
+        },
+
+        // Edit Tab
+        editFilters: { category: '', collection: '', status: '' },
+        showEditModal: false,
+        editingFile: null,
+
+        // Prompts Tab
+        selectedPromptCollection: '',
+        currentPromptConfig: null,
+        newAttributeValue: {},
+        showGenerationModal: false,
+        generatingCollection: null,
+        generationCount: 5,
+
+        init() {
+          this.loadCategories();
+          this.loadAllCollections();
+          this.startAutoRefresh();
+        },
+
+        async loadCategories() {
+          try {
+            const res = await fetch('/api/categories');
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            this.categories = Array.isArray(data) ? data : [];
+            console.log('Categories loaded:', this.categories);
+            if (this.categories.length > 0 && !this.selectedCategory) {
+              this.selectedCategory = this.categories[0].name;
+            }
+          } catch (error) {
+            console.error('Error loading categories:', error);
+            this.showNotification(`❌ Failed to load categories: ${error.message}`);
+          }
+        },
+
+        async loadAllCollections() {
+          try {
+            const res = await fetch('/api/collections');
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            this.allCollections = Array.isArray(data) ? data : [];
+            console.log('Collections loaded:', this.allCollections);
+          } catch (error) {
+            console.error('Error loading collections:', error);
+            this.showNotification(`❌ Failed to load collections: ${error.message}`);
+          }
+        },
+
+        getCollectionsForCategory() {
+          return this.allCollections.filter(c => c.category === this.selectedCategory);
+        },
+
+        getEditCollections() {
+          if (!this.editFilters.category) return this.allCollections;
+          return this.allCollections.filter(c => c.category === this.editFilters.category);
+        },
+
+        getAllCollections() {
+          return this.allCollections;
+        },
+
+        async createNewCategory() {
+          if (!this.newCategory.name) {
+            this.showNotification('Category name is required');
+            return;
+          }
+          try {
+            await fetch('/api/categories', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name: this.newCategory.name, metadata: this.newCategory.metadata })
+            });
+            this.showNotification(`✅ Category "${this.newCategory.name}" created!`);
+            this.showNewCategoryModal = false;
+            this.newCategory = { name: '', metadata: { title: '', description: '', image_url: '' } };
+            await this.loadCategories();
+            await this.loadAllCollections();
+          } catch (error) {
+            this.showNotification(`❌ Error: ${error}`);
+          }
+        },
+
+        async createNewCollection() {
+          if (!this.newCollection.category || !this.newCollection.name) {
+            this.showNotification('Category and collection name are required');
+            return;
+          }
+          try {
+            await fetch('/api/collections', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(this.newCollection)
+            });
+            this.showNotification(`✅ Collection "${this.newCollection.name}" created!`);
+            this.showNewCollectionModal = false;
+            this.newCollection = {
+              category: '',
+              name: '',
+              metadata: {
+                title: '',
+                h1: '',
+                description: '',
+                image_url: '',
+                cms_batch_size: 5,
+                cms_frontmatter_template: {
+                  type: 'coloring-pages',
+                  difficulty: 'Easy',
+                  style: 'Bold',
+                  medium: 'Markers'
+                }
+              }
+            };
+            await this.loadAllCollections();
+          } catch (error) {
+            this.showNotification(`❌ Error: ${error}`);
+          }
+        },
+
+        async refreshEditContent() {
+          try {
+            if (!this.editFilters.category || !this.editFilters.collection) {
+              this.editContent = [];
+              return;
+            }
+            let url = `/api/content/${this.editFilters.category}/${this.editFilters.collection}`;
+            if (this.editFilters.status === 'draft') url += '?draft=true';
+            if (this.editFilters.status === 'published') url += '?draft=false';
+            
+            const res = await fetch(url);
+            this.editContent = await res.json();
+          } catch (error) {
+            console.error('Error loading content:', error);
+          }
+        },
+
+        async saveEditingFile() {
+          if (!this.editingFile) return;
+          try {
+            const category = this.editFilters.category;
+            const collection = this.editFilters.collection;
+            await fetch(`/api/content/${category}/${collection}/${this.editingFile.filename}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(this.editingFile.frontmatter)
+            });
+            this.showNotification('✅ Frontmatter saved!');
+            this.showEditModal = false;
+            await this.refreshEditContent();
+          } catch (error) {
+            this.showNotification(`❌ Error: ${error}`);
+          }
+        },
+
+        async approveEditingFile() {
+          if (!this.editingFile) return;
+          try {
+            const category = this.editFilters.category;
+            const collection = this.editFilters.collection;
+            await fetch(`/api/content/${category}/${collection}/${this.editingFile.filename}/approve`, {
+              method: 'POST'
+            });
+            this.showNotification('✅ Content approved and published!');
+            this.showEditModal = false;
+            await this.refreshEditContent();
+          } catch (error) {
+            this.showNotification(`❌ Error: ${error}`);
+          }
+        },
+
+        async deleteEditingFile() {
+          if (!this.editingFile || !confirm('Are you sure? This cannot be undone.')) return;
+          try {
+            const category = this.editFilters.category;
+            const collection = this.editFilters.collection;
+            await fetch(`/api/content/${category}/${collection}/${this.editingFile.filename}`, {
+              method: 'DELETE'
+            });
+            this.showNotification('✅ Content deleted!');
+            this.showEditModal = false;
+            await this.refreshEditContent();
+          } catch (error) {
+            this.showNotification(`❌ Error: ${error}`);
+          }
+        },
+
+        async loadPromptConfig() {
+          if (!this.selectedPromptCollection) {
+            this.currentPromptConfig = null;
+            return;
+          }
+          try {
+            const [category, collection] = this.selectedPromptCollection.split('/');
+            const res = await fetch(`/api/prompts/${category}/${collection}`);
+            this.currentPromptConfig = await res.json();
+            this.newAttributeValue = {};
+          } catch (error) {
+            console.error('Error loading prompt:', error);
+            this.showNotification('❌ Error loading prompt');
+          }
+        },
+
+        removeAttribute(attributeName, index) {
+          if (this.currentPromptConfig.attributes[attributeName]) {
+            this.currentPromptConfig.attributes[attributeName].splice(index, 1);
+          }
+        },
+
+        addAttribute(attributeName) {
+          const value = this.newAttributeValue[attributeName];
+          if (!value || !value.trim()) return;
+
+          if (!this.currentPromptConfig.attributes[attributeName]) {
+            this.currentPromptConfig.attributes[attributeName] = [];
+          }
+          this.currentPromptConfig.attributes[attributeName].push(value.trim());
+          this.newAttributeValue[attributeName] = '';
+        },
+
+        async savePromptConfig() {
+          if (!this.selectedPromptCollection || !this.currentPromptConfig) return;
+          try {
+            const [category, collection] = this.selectedPromptCollection.split('/');
+            await fetch(`/api/prompts/${category}/${collection}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(this.currentPromptConfig)
+            });
+            this.showNotification('✅ Prompt saved!');
+            await this.loadPromptConfig();
+          } catch (error) {
+            this.showNotification(`❌ Error: ${error}`);
+          }
+        },
+
+        generateForCollection(collection) {
+          this.generatingCollection = collection;
+          this.generationCount = collection.metadata.cms_batch_size || 5;
+          this.showGenerationModal = true;
+        },
+
+        async startGeneration() {
+          if (!this.generatingCollection) return;
+          try {
+            this.isGenerating = true;
+            const { category, name } = this.generatingCollection;
+            const res = await fetch(`/api/generate/${category}/${name}`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ count: this.generationCount })
+            });
+            const data = await res.json();
+            this.showNotification(data.message);
+            this.showGenerationModal = false;
+            
+            // Poll for completion
+            setTimeout(async () => {
+              await this.loadAllCollections();
+              this.isGenerating = false;
+            }, 30000);
+          } catch (error) {
+            this.showNotification(`❌ Error: ${error}`);
+            this.isGenerating = false;
+          }
+        },
+
+        async testGenerateOne() {
+          if (!this.selectedPromptCollection) {
+            this.showNotification('Please select a collection first');
+            return;
+          }
+          try {
+            this.isGenerating = true;
+            const [category, collection] = this.selectedPromptCollection.split('/');
+            const res = await fetch(`/api/generate/${category}/${collection}`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ count: 1 })
+            });
+            const data = await res.json();
+            this.showNotification('🧪 Test generation started...');
+            
+            setTimeout(async () => {
+              await this.loadAllCollections();
+              this.isGenerating = false;
+              this.showNotification('✅ Test generation complete!');
+            }, 30000);
+          } catch (error) {
+            this.showNotification(`❌ Error: ${error}`);
+            this.isGenerating = false;
+          }
+        },
+
+        showNotification(msg) {
+          this.notification = msg;
+          setTimeout(() => { this.notification = ''; }, 4000);
+        },
+
+        startAutoRefresh() {
+          // Refresh categories periodically
+          setInterval(() => this.loadCategories(), 15000);
+          
+          // Refresh collections periodically
+          setInterval(() => this.loadAllCollections(), 15000);
+          
+          // Refresh edit content if viewing
+          setInterval(() => {
+            if (this.activeTab === 'edit' && this.editFilters.category && this.editFilters.collection) {
+              this.refreshEditContent();
+            }
+          }, 10000);
+        }
+      }))
+    });
+  </script>
+</body>
+
+</html>

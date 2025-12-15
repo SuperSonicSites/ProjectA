@@ -3,9 +3,11 @@ import path from 'path';
 
 // Load .env from project root
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
+// Also load .dev.vars for local secrets
+dotenv.config({ path: path.resolve(__dirname, '../.dev.vars') });
 
 const required = [
-  'GEMINI_API_KEY',
+  'RECRAFT_API_KEY',
   'R2_ACCOUNT_ID',
   'R2_ACCESS_KEY_ID',
   'R2_SECRET_ACCESS_KEY'

@@ -34,7 +34,7 @@ secrets/
 /static/css/main.css
 
 # Local CMS Backend (completely local, not for repo)
-scripts/morning-routine/
+
 
 # CMS Prompt Configurations (generation settings, not needed in repo)
 config/prompts/
