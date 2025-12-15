@@ -5,6 +5,7 @@ theme = 'visual-sanctuary-theme'
 
 [params]
   description = "Discover the best free printable coloring pages for adults and kids. High-quality animals, mandalas, and more."
+  h1 = "Find The Perfect Coloring Pages, Just For You"
   cf_images_hash = "G92SwfasiUv-usR1s4VYvA"
   
 # GA4 Integration
