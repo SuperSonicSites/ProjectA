@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+[x-cloak] {
+    display: none !important;
+}
+
 /* Accessibility: Screen reader only content */
 .sr-only {
   position: absolute;

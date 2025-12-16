@@ -1,22 +1,37 @@
 ---
-title: "About Visual Sanctuary"
+title: "About PaperPause"
 date: 2024-01-01
 url: "/about/"
 type: "page"
 ---
 
-## Welcome to Visual Sanctuary
+## Welcome to PaperPause
 
-At **Visual Sanctuary**, we believe in the healing power of creativity. In a fast-paced digital world, taking a moment to slow down and focus on a simple, tactile activity can work wonders for your mental well-being.
+At **PaperPause**, we believe coloring should be simple, fun, and accessible for everyone. Our mission is to provide **easy-to-color coloring pages** that bring joy to the whole family—without the frustration of complicated designs or being bombarded by ads.
 
-Our mission is to provide high-quality, **free printable coloring pages** that are accessible to everyone. Whether you are looking for complex mandalas to center your thoughts, intricate animal portraits to explore your artistic side, or seasonal themes to celebrate the holidays, we have something for you.
+We know how frustrating it can be to find quality coloring pages online, only to be interrupted by pop-ups, banners, and endless advertisements. That's why we've built PaperPause as a peaceful space where ads are kept to a minimum, so you can focus on what matters: having fun with your family.
 
-### Why Coloring?
+### Why PaperPause?
 
-Coloring isn't just for kids. For adults, it serves as a powerful tool for:
-- **Stress Reduction**: Lowering cortisol levels and calming the mind.
-- **Mindfulness**: Helping you stay present in the moment.
-- **Creative Expression**: A low-pressure outlet for artistic energy.
+**Minimal Ads, Maximum Fun**
 
-Everything on this site is free to download and print for your personal use. Grab your favorite colored pencils, markers, or crayons, and find your sanctuary.
+Unlike other coloring page sites, PaperPause keeps ads to a minimum. We believe your coloring time should be peaceful and uninterrupted. No pop-ups, no intrusive banners—just you, your colors, and the page in front of you.
 
+### For Everyone
+
+Whether you're a parent looking for simple pages for your little ones, a teenager exploring creativity, or an adult seeking a relaxing hobby, PaperPause has something for you. Our collection includes:
+
+- **Easy designs** perfect for beginners and kids
+- **Engaging patterns** for those who want a bit more challenge
+- **Family favorites** like animals, nature scenes, and fun characters
+
+Every page is designed to be approachable and enjoyable, regardless of your skill level or age.
+
+### Easy & Fun
+
+We keep things simple. Our coloring pages are:
+- **Easy to download** – Just click and print
+- **Easy to color** – Clear lines and simple shapes
+- **Free to use** – No sign-ups, no fees, no hassle
+
+Everything on this site is free to download and print for your personal use. Grab your favorite colored pencils, markers, or crayons, and start coloring!

@@ -9,15 +9,12 @@ type: "page"
 
 We love hearing from our community! Whether you have a suggestion for a new coloring page category, feedback on our website, or just want to share your finished artwork, we're here to listen.
 
-### How to Reach Us
+Fill out the form below and we'll get back to you within 48 hours.
 
-For general inquiries, partnerships, or support, please email us at:
-
-**[hello@visualsanctuary.com](mailto:hello@visualsanctuary.com)**
-
-We aim to respond to all inquiries within 48 hours.
+{{< contact-form >}}
 
 ### Follow Us
 
-Stay updated on the latest releases and community features by following us on social media. (Links coming soon!)
+Stay updated on the latest coloring pages and community features by following us on Pinterest:
 
+{{< pinterest-link >}}

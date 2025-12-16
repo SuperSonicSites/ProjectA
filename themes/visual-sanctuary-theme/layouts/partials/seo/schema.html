@@ -23,7 +23,8 @@
       "inLanguage": "{{ .Site.LanguageCode }}"
     }
 
-    {{/* 2. Breadcrumbs Schema */}}
+    {{/* 2. Breadcrumbs Schema - Only on non-homepage pages */}}
+    {{ if not .IsHome }}
     ,
     {
       "@type": "BreadcrumbList",
@@ -37,6 +38,7 @@
         }
         {{ $qt := 2 }}
         {{ range .Page.Ancestors.Reverse }}
+        {{ if not .IsHome }}
         ,{
           "@type": "ListItem",
           "position": {{ $qt }},
@@ -44,6 +46,7 @@
           "item": "{{ .Permalink }}"
         }
         {{ $qt = add $qt 1 }}
+        {{ end }}
         {{ end }}
         ,{
           "@type": "ListItem",
@@ -53,17 +56,62 @@
         }
       ]
     }
+    {{ end }}
 
-    {{/* 3. Single Asset Schema (ImageObject + CreativeWork) */}}
+    {{/* 3. CollectionPage Schema for List/Section Pages */}}
+    {{ if .IsSection }}
+    ,
+    {
+      "@type": "CollectionPage",
+      "@id": "{{ .Permalink }}#collectionpage",
+      "url": "{{ .Permalink }}",
+      "name": "{{ .Title }}",
+      "description": "{{ .Description | default .Summary | plainify }}",
+      "mainEntity": { "@id": "{{ .Permalink }}#itemlist" },
+      "isPartOf": { "@id": "{{ .Site.BaseURL }}#website" }
+    }
+    ,
+    {
+      "@type": "ItemList",
+      "@id": "{{ .Permalink }}#itemlist",
+      "numberOfItems": {{ len .Pages }},
+      "itemListElement": [
+        {{ range $index, $page := .Pages }}
+        {{ if gt $index 0 }},{{ end }}
+        {
+          "@type": "ListItem",
+          "position": {{ add $index 1 }},
+          "item": {
+            "@type": "CreativeWork",
+            "@id": "{{ $page.Permalink }}#creativework",
+            "name": "{{ $page.Title }}",
+            "url": "{{ $page.Permalink }}"
+          }
+        }
+        {{ end }}
+      ]
+    }
+    {{ end }}
+
+    {{/* 4. Single Asset Schema (ImageObject + CreativeWork) */}}
     {{ if and .IsPage (not .IsHome) }}
+    {{/* Determine image URL - prioritize cf_image_id like head.html */}}
+    {{ $schemaImage := "" }}
+    {{ if .Params.cf_image_id }}
+      {{ $schemaImage = printf "https://imagedelivery.net/%s/%s/desktop" $.Site.Params.cf_images_hash .Params.cf_image_id }}
+    {{ else if .Params.image_url }}
+      {{ $schemaImage = .Params.image_url | absURL }}
+    {{ end }}
+    {{ if $schemaImage }}
     ,
     {
       "@type": "ImageObject",
       "@id": "{{ .Permalink }}#primaryimage",
-      "url": "{{ .Params.image_url | absURL }}",
-      "contentUrl": "{{ .Params.image_url | absURL }}",
+      "url": "{{ $schemaImage }}",
+      "contentUrl": "{{ $schemaImage }}",
       "caption": "{{ .Title }}"
     }
+    {{ end }}
     ,
     {
       "@type": "CreativeWork",
@@ -71,9 +119,11 @@
       "url": "{{ .Permalink }}",
       "name": "{{ .Title }}",
       "headline": "{{ .Title }}",
-      "description": "{{ .Description | default .Summary | plainify }}",
-      "image": { "@id": "{{ .Permalink }}#primaryimage" },
-      "genre": "{{ .Params.style }} Coloring Page",
+      "description": "{{ .Description | default .Summary | plainify }}"
+      {{ if $schemaImage }}
+      ,"image": { "@id": "{{ .Permalink }}#primaryimage" }
+      {{ end }}
+      ,"genre": "{{ .Params.style }} Coloring Page",
       {{ $keywords := slice }}
       {{ if .Params.categories }}{{ $keywords = $keywords | append .Params.categories }}{{ end }}
       {{ if .Params.collections }}{{ $keywords = $keywords | append .Params.collections }}{{ end }}
