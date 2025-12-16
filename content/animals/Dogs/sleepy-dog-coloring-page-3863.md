@@ -15,7 +15,7 @@ categories:
 collections:
   - Dogs
 difficulty: Easy
-style: Bold
+style: Bold Line Pop Art
 medium: Markers
 cf_image_id: 30a02d22-3632-446d-b0ce-4c1ed2c49b00
 image_url: >-

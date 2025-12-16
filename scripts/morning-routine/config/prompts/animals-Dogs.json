@@ -1,7 +1,7 @@
 {
   "collection": "Dogs",
   "category": "animals",
-  "base": "Black and white line art coloring page.\n\nCRITICAL TECHNICAL REQUIREMENTS:\n- OUTLINES ONLY: Use ONLY black outlines to define all shapes. NO filled black areas, NO solid black shapes, NO shading\n- Background: Pure white (#FFFFFF). NO transparency, NO gradients, NO gray tones\n- Format: Line art suitable for coloring. All areas must be colorable spaces within outlines\n- Aspect ratio: 3:4 portrait orientation (vertical composition)\n- Centered composition with adequate margins (10-15% on all sides)\n\nCOMPOSITION:\n- A dog as the main subject\n- Character engaged in an activity or pose\n- Include relevant environmental elements and props that support the scene\n- Balanced composition with clear focal point\n\nSUBJECT: A dog.",
+  "base": "Black and white line art coloring page.\n\nCRITICAL TECHNICAL REQUIREMENTS:\n- OUTLINES ONLY: Use ONLY black outlines to define all shapes. NO filled black areas, NO solid black shapes, NO shading\n- Background: Pure white (#FFFFFF). NO transparency, NO gradients, NO gray tones\n- Format: Line art suitable for coloring. All areas must be colorable spaces within outlines\n- Aspect ratio: 3:4 portrait orientation (vertical composition)\n- Centered composition with adequate margins (10-15% on all sides)\n\nCOMPOSITION:\n- A dog or a puppy as the main subject\n- Character engaged in an activity or pose\n- Include relevant environmental elements and props that support the scene\n- Balanced composition with clear focal point\n\nSUBJECT: A dog or puppy.",
   "negative_prompt": "realistic, photorealistic, detailed fur, realistic textures, thin lines, fine lines, hairline, delicate lines, transparent background, transparency, color, shading, gray, gradient, photo, 3d, rendering, text, signature, watermark, blurry, broken lines, sketch, messy, horizontal orientation, landscape, filled areas, solid colors, filled black areas, black shapes, solid black, black fill, dark areas, shadows, black spots, filled spaces, decorative borders, ornate frames, complex patterns, mandala patterns, intricate details, busy background, square format, 1:1 ratio, wide image, horizontal image",
   "attributes": {
     "tones": [
@@ -36,12 +36,16 @@
     "actions": [
       "napping",
       "reading",
-      "painting",
       "playing",
       "smiling",
       "resting",
-      "sitting",
-      "howling"
+      "howling",
+      "Playing Tug-of-War",
+      "Chasing a Ball",
+      "Digging",
+      "Doing The \"Sploot\"",
+      "Sitting Pretty",
+      "Chewing a Shoe"
     ],
     "settings": [
       "home",

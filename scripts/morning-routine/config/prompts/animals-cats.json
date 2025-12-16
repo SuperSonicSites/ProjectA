@@ -1,7 +1,7 @@
 {
   "collection": "cats",
   "category": "animals",
-  "base": "Black and white line art coloring page.\n\nCRITICAL TECHNICAL REQUIREMENTS:\n- OUTLINES ONLY: Use ONLY black outlines to define all shapes. NO filled black areas, NO solid black shapes, NO shading\n- Background: Pure white (#FFFFFF). NO transparency, NO gradients, NO gray tones\n- Format: Line art suitable for coloring. All areas must be colorable spaces within outlines\n- Aspect ratio: 3:4 portrait orientation (vertical composition)\n- Centered composition with adequate margins (5% on all sides)\n\nCOMPOSITION:\n- A cat as the main subject\n- Character engaged in an activity or pose\n- Include relevant environmental elements and props that support the scene\n- Balanced composition with clear focal point\n\nSUBJECT: A cat.",
+  "base": "Black and white line art coloring page.\n\nCRITICAL TECHNICAL REQUIREMENTS:\n- OUTLINES ONLY: Use ONLY black outlines to define all shapes. NO filled black areas, NO solid black shapes, NO shading\n- Background: Pure white (#FFFFFF). NO transparency, NO gradients, NO gray tones\n- Format: Line art suitable for coloring. All areas must be colorable spaces within outlines\n- Aspect ratio: 3:4 portrait orientation (vertical composition)\n- Centered composition with adequate margins (5% on all sides)\n\nCOMPOSITION:\n- A cat or a kitten as the main subject\n- Character engaged in an activity or pose\n- Include relevant environmental elements and props that support the scene\n- Balanced composition with clear focal point\n\nSUBJECT: A cat or a kitten.",
   "negative_prompt": "realistic, photorealistic, detailed fur, realistic textures, thin lines, fine lines, hairline, delicate lines, transparent background, transparency, color, shading, gray, gradient, photo, 3d, rendering, text, signature, watermark, blurry, broken lines, sketch, messy, horizontal orientation, landscape, filled areas, solid colors, filled black areas, black shapes, solid black, black fill, dark areas, shadows, black spots, filled spaces, decorative borders, ornate frames, complex patterns, mandala patterns, intricate details, busy background, square format, 1:1 ratio, wide image, horizontal image",
   "attributes": {
     "tones": [
@@ -43,7 +43,6 @@
       "knitting a scarf",
       "sipping herbal tea",
       "potting plants",
-      "playing chess",
       "watching the rain",
       "peering into a fishbowl",
       "unraveling a ball of yarn"
@@ -51,10 +50,8 @@
     "settings": [
       "rustic kitchen",
       "sunlit garden",
-      "dusty library",
       "treehouse",
       "Parisian apartment balcony",
-      "flower shop window",
       "cozy fireplace rug",
       "Japanese zen garden",
       "messy art studio",
