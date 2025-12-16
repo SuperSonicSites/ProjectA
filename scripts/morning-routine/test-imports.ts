@@ -14,3 +14,4 @@ console.log('📁 Categories found:', categories.length);
 console.log('✅ All functions are callable');
 
 
+
