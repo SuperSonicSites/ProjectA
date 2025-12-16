@@ -31,7 +31,7 @@
       <guid>{{ .Permalink }}</guid>
       <description>{{ if .Params.pinterest_description }}{{ .Params.pinterest_description | html }}{{ else if .Description }}{{ .Description | html }}{{ else }}{{ .Summary | html }}{{ end }}</description>
       {{- if .Params.prompt }}
-      <prompt>{{ .Params.prompt | html }}</prompt>
+      <prompt>Coloring page of {{ .Params.prompt | html }}</prompt>
       {{- end }}
       {{- if .Params.cf_image_id }}
       {{- $imageUrl := printf "https://imagedelivery.net/%s/%s/rss" $.Site.Params.cf_images_hash .Params.cf_image_id }}
