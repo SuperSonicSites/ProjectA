@@ -17,6 +17,7 @@
                 <li><a href="/privacy/" class="hover:text-white">Privacy Policy</a></li>
                 <li><a href="/terms/" class="hover:text-white">Terms of Service</a></li>
                 <li><a href="/about/" class="hover:text-white">About Us</a></li>
+                <li><button onclick="window.ppOpenCookieBanner()" class="text-slate-300 hover:text-white cursor-pointer font-normal">Cookie Settings</button></li>
             </ul>
         </div>
     </div>
@@ -29,42 +30,9 @@
     </div>
 </footer>
 
-<!-- Master Analytics Collector (Docs Trigger) -->
+<!-- Cookie Consent Banner -->
+{{ partial "cookie-banner.html" . }}
+
+<!-- Analytics Events (GA4 + Pinterest) -->
 {{ partial "search-modal.html" . }}
-<script>
-    /**
-     * Visual Sanctuary - Master Analytics Collector
-     * Tracks: Downloads, External Clicks, and Category Context
-     */
-    document.addEventListener('click', function (e) {
-        const link = e.target.closest('a');
-        if (!link) return;
-
-        // A. Track PDF Downloads
-        if (link.href.endsWith('.pdf')) {
-            const filename = link.href.split('/').pop();
-            const pathSegments = window.location.pathname.split('/').filter(Boolean);
-            const silo = pathSegments[0] || 'uncategorized';
-            const collection = pathSegments[1] || 'general';
-
-            if (typeof gtag === 'function') {
-                gtag('event', 'asset_download', {
-                    'file_name': filename,
-                    'file_category': silo,
-                    'file_subcategory': collection,
-                    'link_location': link.closest('.action-deck') ? 'sticky_bar' : 'main_body'
-                });
-            }
-        }
-
-        // B. Track External Clicks
-        if (link.hostname !== window.location.hostname && !link.href.endsWith('.pdf')) {
-            if (typeof gtag === 'function') {
-                gtag('event', 'outbound_click', {
-                    'destination_domain': link.hostname,
-                    'link_url': link.href
-                });
-            }
-        }
-    });
-</script>
+{{ partial "analytics-events.html" . }}

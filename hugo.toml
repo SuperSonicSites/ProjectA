@@ -10,6 +10,9 @@ theme = 'visual-sanctuary-theme'
 # GA4 Integration
 googleAnalytics = "G-R0NHTPYWFY"
 
+# Pinterest Tag Integration
+pinterestTag = "2613274913432"
+
 [taxonomies]
   category = "categories"  # Silo (Animals)
   series = "collections"   # Sub-Silo (Cats)

@@ -1,0 +1,129 @@
+<div id="pp-cookie-banner" class="fixed bottom-0 left-0 right-0 bg-slate-900 text-slate-300 shadow-2xl border-t border-slate-700 z-40" role="dialog" aria-labelledby="pp-cookie-title" aria-modal="true" style="display: none;">
+    <div class="container mx-auto px-4 py-6">
+        <div class="max-w-4xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <!-- Text Content -->
+            <div class="flex-1">
+                <h2 id="pp-cookie-title" class="text-lg font-bold text-white mb-2">Cookie Consent</h2>
+                <p class="text-sm text-slate-400">
+                    We use cookies for analytics (Google Analytics 4) and Pinterest measurement to understand how you use our site and improve your experience. You can accept all cookies or reject them.
+                    <a href="/privacy/#cookies-and-web-beacons" class="text-teal-400 hover:text-teal-300 underline">Learn more</a>
+                </p>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex gap-3 flex-shrink-0">
+                <button id="pp-cookie-reject" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white font-medium rounded-lg transition whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-slate-900">
+                    Reject
+                </button>
+                <button id="pp-cookie-accept" class="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-lg transition whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2 focus:ring-offset-slate-900">
+                    Accept All
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    /**
+     * Cookie Banner Controller
+     * Manages display, user interactions, and consent persistence
+     */
+    
+    const CONSENT_KEY = 'pp_cookie_consent';
+    const CONSENT_EXPIRY_DAYS = 180;
+    const CONSENT_STATES = {
+        ACCEPTED: 'accepted',
+        REJECTED: 'rejected'
+    };
+
+    const banner = document.getElementById('pp-cookie-banner');
+    const acceptBtn = document.getElementById('pp-cookie-accept');
+    const rejectBtn = document.getElementById('pp-cookie-reject');
+
+    // Check if consent is stored and valid
+    function isConsentValid() {
+        const stored = localStorage.getItem(CONSENT_KEY);
+        if (!stored) return false;
+
+        try {
+            const parsed = JSON.parse(stored);
+            const expiryDate = new Date(parsed.timestamp);
+            expiryDate.setDate(expiryDate.getDate() + CONSENT_EXPIRY_DAYS);
+            return new Date() < expiryDate;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    // Show banner
+    function showBanner() {
+        if (banner) {
+            banner.style.display = 'block';
+            // Focus first button for accessibility
+            setTimeout(() => acceptBtn?.focus(), 100);
+        }
+    }
+
+    // Hide banner
+    function hideBanner() {
+        if (banner) {
+            banner.style.display = 'none';
+        }
+    }
+
+    // Handle accept
+    function handleAccept() {
+        window.ppSetConsentAndLoad(CONSENT_STATES.ACCEPTED);
+        hideBanner();
+    }
+
+    // Handle reject
+    function handleReject() {
+        window.ppSetConsentAndLoad(CONSENT_STATES.REJECTED);
+        hideBanner();
+    }
+
+    // Attach event listeners
+    acceptBtn?.addEventListener('click', handleAccept);
+    rejectBtn?.addEventListener('click', handleReject);
+
+    // Listen for open banner event
+    window.addEventListener('ppOpenBanner', showBanner);
+
+    // Listen for consent changes (in case another tab changed it)
+    window.addEventListener('storage', function(e) {
+        if (e.key === CONSENT_KEY) {
+            if (!isConsentValid()) {
+                showBanner();
+            } else {
+                hideBanner();
+            }
+        }
+    });
+
+    // Show banner if no consent is stored
+    document.addEventListener('DOMContentLoaded', function() {
+        if (!isConsentValid()) {
+            showBanner();
+        } else {
+            hideBanner();
+        }
+    });
+
+    // If DOMContentLoaded already fired
+    if (document.readyState !== 'loading') {
+        if (!isConsentValid()) {
+            showBanner();
+        } else {
+            hideBanner();
+        }
+    }
+
+    // Keyboard support (Escape to dismiss)
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && banner?.style.display !== 'none') {
+            handleReject();
+        }
+    });
+</script>
+

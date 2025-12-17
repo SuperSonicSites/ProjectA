@@ -32,7 +32,7 @@
         </p>
 
         <!-- Desktop Action (Hidden on Mobile) -->
-        <div class="hidden md:block space-y-4 mb-12">
+        <div class="hidden md:block space-y-4 mb-12" data-track-location="desktop_sidebar">
             <a href="{{ .Params.download_url | default .Params.r2_original }}"
                download="{{ .Title | urlize }}.pdf"
                aria-label="Download {{ .Title }} as printable PDF"
@@ -73,7 +73,7 @@
 </div>
 
 <!-- Mobile Sticky Action Deck -->
-<div class="action-deck md:hidden fixed bottom-4 left-4 right-4 z-50">
+<div class="action-deck md:hidden fixed bottom-4 left-4 right-4 z-50" data-track-location="sticky_bar">
     <a href="{{ .Params.download_url | default .Params.r2_original }}"
        download="{{ .Title | urlize }}.pdf"
        aria-label="Download {{ .Title }} as printable PDF"
@@ -81,7 +81,7 @@
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-        </svg>
+            </svg>
         DOWNLOAD PDF
     </a>
 </div>

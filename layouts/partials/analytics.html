@@ -1,0 +1,156 @@
+<!-- Cookie Consent Gating for GA4 + Pinterest -->
+<script>
+    /**
+     * Cookie Consent Manager
+     * Stores consent in localStorage with 180-day expiry
+     * Loads GA4 + Pinterest only if consent is accepted
+     */
+
+    // Configuration
+    const CONSENT_KEY = 'pp_cookie_consent';
+    const CONSENT_EXPIRY_DAYS = 180;
+    const CONSENT_STATES = {
+        ACCEPTED: 'accepted',
+        REJECTED: 'rejected'
+    };
+
+    // Check if consent is stored and valid
+    function isConsentValid() {
+        const stored = localStorage.getItem(CONSENT_KEY);
+        if (!stored) return false;
+
+        const parsed = JSON.parse(stored);
+        const expiryDate = new Date(parsed.timestamp);
+        expiryDate.setDate(expiryDate.getDate() + CONSENT_EXPIRY_DAYS);
+
+        return new Date() < expiryDate && parsed.value === CONSENT_STATES.ACCEPTED;
+    }
+
+    // Store consent decision
+    function setConsentDecision(decision) {
+        localStorage.setItem(CONSENT_KEY, JSON.stringify({
+            value: decision,
+            timestamp: new Date().toISOString()
+        }));
+    }
+
+    // Get current consent state
+    function getConsentState() {
+        const stored = localStorage.getItem(CONSENT_KEY);
+        if (!stored) return null;
+        const parsed = JSON.parse(stored);
+        
+        const expiryDate = new Date(parsed.timestamp);
+        expiryDate.setDate(expiryDate.getDate() + CONSENT_EXPIRY_DAYS);
+        
+        if (new Date() >= expiryDate) {
+            localStorage.removeItem(CONSENT_KEY);
+            return null;
+        }
+        
+        return parsed.value;
+    }
+
+    // Load GA4
+    function ppLoadGA4() {
+        if (typeof gtag !== 'undefined') return; // Already loaded
+
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id={{ .Site.Params.googleAnalytics }}';
+        document.head.appendChild(script);
+
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        window.gtag = gtag;
+        gtag('js', new Date());
+
+        gtag('config', '{{ .Site.Params.googleAnalytics }}', {
+            'send_page_view': true,
+            'enhanced_measurement': {
+                'scrolls': true,
+                'outbound_clicks': false,
+                'site_search': true,
+                'video_engagement': false,
+                'file_downloads': true
+            }
+        });
+    }
+
+    // Load Pinterest Tag
+    function ppLoadPinterest() {
+        if (typeof pintrk !== 'undefined') return; // Already loaded
+
+        !function(e){if(!window.pintrk){window.pintrk = function () {
+        window.pintrk.queue.push(Array.prototype.slice.call(arguments))};var
+          n=window.pintrk;n.queue=[],n.version="3.0";var
+          t=document.createElement("script");t.async=!0,t.src=e;var
+          r=document.getElementsByTagName("script")[0];
+          r.parentNode.insertBefore(t,r)}}("https://s.pinimg.com/ct/core.js");
+        
+        pintrk('load', '{{ .Site.Params.pinterestTag }}');
+        pintrk('page');
+
+        // Pinterest noscript fallback
+        const noscript = document.createElement('img');
+        noscript.height = 1;
+        noscript.width = 1;
+        noscript.style.display = 'none';
+        noscript.alt = '';
+        noscript.src = 'https://ct.pinterest.com/v3/?event=init&tid={{ .Site.Params.pinterestTag }}&noscript=1';
+        document.body.appendChild(noscript);
+    }
+
+    // Load analytics if consent is given
+    function ppLoadAnalyticsIfConsented() {
+        if (isConsentValid()) {
+            {{ if .Site.Params.googleAnalytics }}ppLoadGA4();{{ end }}
+            {{ if .Site.Params.pinterestTag }}ppLoadPinterest();{{ end }}
+        }
+    }
+
+    // Expose globally so banner can call this
+    window.ppSetConsentAndLoad = function(decision) {
+        setConsentDecision(decision);
+        if (decision === CONSENT_STATES.ACCEPTED) {
+            ppLoadAnalyticsIfConsented();
+        }
+        // Dispatch event so other scripts can listen
+        window.dispatchEvent(new CustomEvent('ppConsentChanged', { detail: decision }));
+    };
+
+    window.ppOpenCookieBanner = function() {
+        window.dispatchEvent(new CustomEvent('ppOpenBanner'));
+    };
+
+    // Load on page load if consent exists
+    document.addEventListener('DOMContentLoaded', function() {
+        ppLoadAnalyticsIfConsented();
+    });
+
+    // Also try immediately in case DOMContentLoaded already fired
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', ppLoadAnalyticsIfConsented);
+    } else {
+        ppLoadAnalyticsIfConsented();
+    }
+</script>
+
+<!-- Expose consent state to other scripts -->
+<script>
+    window.ppGetConsentState = function() {
+        const stored = localStorage.getItem('pp_cookie_consent');
+        if (!stored) return null;
+        const parsed = JSON.parse(stored);
+        
+        const expiryDate = new Date(parsed.timestamp);
+        expiryDate.setDate(expiryDate.getDate() + 180);
+        
+        if (new Date() >= expiryDate) {
+            localStorage.removeItem('pp_cookie_consent');
+            return null;
+        }
+        
+        return parsed.value;
+    };
+</script>

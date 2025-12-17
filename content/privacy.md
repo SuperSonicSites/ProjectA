@@ -45,22 +45,32 @@ When you subscribe to our email newsletter or provide your email address:
   - Product recommendations
 - You can unsubscribe at any time by clicking the unsubscribe link in any email we send, or by contacting us directly
 
-## 2. Cookies and Web Beacons
+## 2. Cookies and Web Beacons {#cookies-and-web-beacons}
 
 PaperPause uses cookies and similar tracking technologies to enhance your browsing experience. These technologies include:
 
 - **Essential Cookies**: Required for the website to function properly
-- **Analytics Cookies**: Used by Google Analytics 4 to collect anonymous usage statistics
-- **Marketing Cookies**: Used by Pinterest and other third-party services to deliver relevant content and measure campaign effectiveness
-- **Preference Cookies**: Store your preferences and settings
+- **Analytics Cookies**: Used by Google Analytics 4 to collect anonymous usage statistics (requires consent)
+- **Marketing Cookies**: Used by Pinterest and other third-party services to deliver relevant content and measure campaign effectiveness (requires consent)
+- **Preference Cookies**: Store your preferences and settings, including your cookie consent choice
 
-Cookies are used to:
-- Remember your preferences and settings
-- Analyze website traffic and user behavior
-- Deliver personalized content and advertisements
-- Measure the effectiveness of our marketing campaigns
+### Consent for Tracking Cookies
 
-You can control cookies through your browser settings. However, disabling certain cookies may limit your ability to use some features of our website.
+When you visit PaperPause, we display a **cookie consent banner** asking for your permission before loading Google Analytics 4 or Pinterest tracking. This banner includes:
+- **Accept All**: Enables both GA4 and Pinterest tracking
+- **Reject All**: Disables all tracking cookies; the site functions normally without analytics
+- **Cookie Settings** (footer link): Opens the consent banner at any time to change your choice
+
+Your consent preference is stored locally in your browser for **180 days**. After 180 days, you will be asked again to confirm your consent choice.
+
+### Cookie Control
+
+You can control cookies through:
+- The **Cookie Settings** link in the footer
+- Your browser settings (to accept or reject cookies globally)
+- Our consent banner (shown on first visit or when you click "Cookie Settings")
+
+Disabling tracking cookies will not affect the functionality of our website—PaperPause will work normally with no analytics or marketing cookies.
 
 ## 3. How We Use Your Information
 
@@ -85,10 +95,12 @@ These third-party services have their own privacy policies. We encourage you to 
 ## 5. Your Rights and Choices
 
 You have the right to:
+- **Manage Cookie Consent**: Use the **"Cookie Settings"** link in the footer to open our consent banner and change your cookie preferences at any time. You can choose to accept or reject analytics and marketing cookies.
+- **Withdraw Consent**: If you previously accepted cookies, you can withdraw your consent using the "Cookie Settings" link. Your new choice will be stored for 180 days.
 - **Opt out of Google Analytics**: Install the [Google Analytics Opt-out Browser Add-on](https://tools.google.com/dlpage/gaoptout)
 - **Opt out of Pinterest tracking**: Adjust your Pinterest account settings
 - **Unsubscribe from emails**: Click the unsubscribe link in any email we send
-- **Control cookies**: Adjust your browser settings to accept or reject cookies
+- **Control cookies**: Adjust your browser settings to accept or reject cookies (note: this may disable some tracking but won't replace consent choices)
 - **Request information**: Contact us to request information about the data we have collected about you
 - **Request deletion**: Contact us to request deletion of your personal information
 

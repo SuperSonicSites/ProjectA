@@ -1,0 +1,149 @@
+<script>
+    /**
+     * Master Analytics Collector - GA4 & Pinterest Dual Tracking
+     * Tracks: PDF Downloads, Search Queries, External Clicks
+     * Platforms: Google Analytics 4 + Pinterest Tag
+     * 
+     * Respects user consent: only fires events if consent was accepted
+     */
+
+    // Check if user has consented to analytics
+    function hasAnalyticsConsent() {
+        const consent = window.ppGetConsentState?.();
+        return consent === 'accepted';
+    }
+
+    // Wait for gtag/pintrk to be ready before attaching listeners
+    function waitForAnalytics(callback, maxAttempts = 100) {
+        if ((typeof gtag === 'function' || typeof pintrk === 'function') && window.dataLayer) {
+            callback();
+        } else if (maxAttempts > 0) {
+            setTimeout(() => waitForAnalytics(callback, maxAttempts - 1), 50);
+        }
+    }
+
+    waitForAnalytics(function() {
+        // Only attach listeners if user has consented
+        if (!hasAnalyticsConsent()) {
+            console.debug('Analytics events: consent not given, listeners not attached');
+            return;
+        }
+
+        // ==========================================
+        // LINK CLICK TRACKING
+        // ==========================================
+        document.addEventListener('click', function (e) {
+            const link = e.target.closest('a');
+            if (!link) return;
+
+            // Extract file metadata from URL path
+            const pathSegments = window.location.pathname.split('/').filter(Boolean);
+            const silo = pathSegments[0] || 'uncategorized';
+            const collection = pathSegments[1] || 'general';
+
+            // Get location tracking attribute
+            const locationElement = link.closest('[data-track-location]');
+            const link_location = locationElement?.dataset.trackLocation || 'page_body';
+
+            // ==========================================
+            // A. TRACK PDF DOWNLOADS
+            // ==========================================
+            const isPdfDownload = 
+                link.href.endsWith('.pdf') || 
+                link.href.includes('.pdf?') ||
+                (link.hasAttribute('download') && link.getAttribute('download').endsWith('.pdf'));
+
+            if (isPdfDownload) {
+                const filename = link.getAttribute('download') || link.href.split('/').pop().split('?')[0];
+                
+                // GA4 Tracking
+                if (typeof gtag === 'function') {
+                    try {
+                        gtag('event', 'asset_download', {
+                            'file_name': filename,
+                            'file_category': silo,
+                            'file_subcategory': collection,
+                            'link_location': link_location
+                        });
+                    } catch (error) {
+                        console.error('GA4 asset_download tracking error:', error);
+                    }
+                }
+
+                // Pinterest Tracking
+                if (typeof pintrk === 'function') {
+                    try {
+                        pintrk('track', 'lead', {
+                            'lead_type': 'PDF Download',
+                            'product_category': silo,
+                            'product_name': filename
+                        });
+                    } catch (error) {
+                        console.error('Pinterest lead tracking error:', error);
+                    }
+                }
+            }
+
+            // ==========================================
+            // B. TRACK EXTERNAL LINKS
+            // ==========================================
+            if (link.hostname !== window.location.hostname && !isPdfDownload) {
+                if (typeof gtag === 'function') {
+                    try {
+                        gtag('event', 'outbound_click', {
+                            'destination_domain': link.hostname,
+                            'link_url': link.href
+                        });
+                    } catch (error) {
+                        console.error('GA4 outbound_click tracking error:', error);
+                    }
+                }
+            }
+        });
+
+        // ==========================================
+        // SEARCH TRACKING
+        // ==========================================
+        let searchTimeout;
+        let lastSearchTerm = '';
+
+        document.addEventListener('input', function (e) {
+            // Match PagefindUI search input
+            if (e.target.matches('#pagefind-ui input')) {
+                clearTimeout(searchTimeout);
+                
+                searchTimeout = setTimeout(() => {
+                    const searchTerm = e.target.value.trim();
+                    
+                    // Only track if query is long enough and different
+                    if (searchTerm.length > 2 && searchTerm !== lastSearchTerm) {
+                        lastSearchTerm = searchTerm;
+
+                        // GA4 Tracking
+                        if (typeof gtag === 'function') {
+                            try {
+                                gtag('event', 'search', {
+                                    'search_term': searchTerm
+                                });
+                            } catch (error) {
+                                console.error('GA4 search tracking error:', error);
+                            }
+                        }
+
+                        // Pinterest Tracking
+                        if (typeof pintrk === 'function') {
+                            try {
+                                pintrk('track', 'search', {
+                                    'search_query': searchTerm
+                                });
+                            } catch (error) {
+                                console.error('Pinterest search tracking error:', error);
+                            }
+                        }
+                    }
+                }, 500); // 500ms debounce
+            }
+        });
+    });
+</script>
+
