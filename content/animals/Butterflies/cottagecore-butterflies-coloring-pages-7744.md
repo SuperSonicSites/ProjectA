@@ -1,12 +1,14 @@
 ---
-title: Zen Cabbage White In A Sky Flying
+title: Butterfly On A Flower With Mushrooms And Vines
 description: >-
-  Free printable zen cabbage whitein a sky flying coloring page in cottagecore
-  style. Perfect for all ages. Download and print for free!
+  Download this free butterfly coloring page featuring detailed flowers and
+  whimsical mushrooms in Cottagecore style. Great for markers or colored
+  pencils!
 pinterest_description: >-
-  Free printable zen cabbage whitein a sky flying coloring page in cottagecore
-  style. Easy-to-color lines perfect for markers. Great for kids, adults, and
-  all skill levels. Download for free now!
+  This enchanting butterfly coloring page features a delicate butterfly with
+  dotted wings, surrounded by blooming wildflowers, whimsical swirling vines,
+  and tiny magical mushrooms in a charming Cottagecore style. Perfect for a
+  relaxing craft session and mindful coloring.
 date: 2025-12-16T10:54:35.183Z
 type: coloring-pages
 draft: false
@@ -23,10 +25,14 @@ download_url: >-
   https://img.paperpause.app/butterflies/cottagecore-butterflies-coloring-pages-7744.pdf
 r2_original: >-
   https://img.paperpause.app/butterflies/cottagecore-butterflies-coloring-pages-7744.png
-prompt: Zen Cabbage White (Pieris rapae) in a sky flying
+prompt: >-
+  A butterfly with two distinct dots on its forewings rests on a multi-petaled
+  flower, framed by a dense arrangement of daisies, curling vines, and small
+  mushrooms.
 tags:
   - Cottagecore
 has_pdf: true
+pinterest_title: Butterfly Flowers Mushrooms Cottagecore Coloring Page
 ---
 
 A beautiful Butterflies coloring page in Cottagecore style.

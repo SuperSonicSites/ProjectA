@@ -151,6 +151,11 @@ export const generateBatch = async (
   collection: string,
   count?: number
 ) => {
+  // Deterministic run id for downstream batch SEO step (GitHub Actions sets GENERATION_RUN_ID)
+  const runId =
+    process.env.GENERATION_RUN_ID ||
+    new Date().toISOString().replace(/[:.]/g, '-'); // safe for filenames on all OSes
+
   // Load collection metadata and prompt
   const contentDir = path.join(path.resolve(__dirname, '../../../content'), category, collection);
   if (!fs.existsSync(contentDir)) {
@@ -169,6 +174,7 @@ export const generateBatch = async (
   logger.info(`Starting batch generation for ${batchSize} images in ${category}/${collection}`);
 
   const results: GenerationResult[] = [];
+  const createdMdPaths: string[] = []; // repo-relative, for manifest
   const limiter = new RateLimiter(2, 5000); // 2 concurrent, 5 seconds between API calls
   const collectionPrefix = collection.slice(0, 3); // "cat", "dog", etc.
 
@@ -253,6 +259,12 @@ A beautiful ${collection} coloring page in ${style.name} style.
         const mdPath = path.join(contentDir, `${id}.md`);
         await fs.writeFile(mdPath, mdContent);
 
+        // Record created file for manifest (repo-relative path)
+        const repoRel = path
+          .relative(path.resolve(__dirname, '../../../'), mdPath)
+          .replace(/\\/g, '/');
+        createdMdPaths.push(repoRel);
+
         const duration = Date.now() - startTime;
         logger.success(`[${i + 1}/${batchSize}] Complete`, {
           id,
@@ -288,6 +300,23 @@ A beautiful ${collection} coloring page in ${style.name} style.
     successful: results.filter(r => r.status === 'success').length,
     failed: results.filter(r => r.status === 'failed').length
   });
+
+  // Write manifest for downstream SEO batch step
+  try {
+    const runsDir = path.resolve(__dirname, '../.runs'); // scripts/morning-routine/.runs
+    await fs.ensureDir(runsDir);
+    const manifestPath = path.join(runsDir, `${runId}.json`);
+    const manifest = {
+      runId,
+      created: createdMdPaths
+    };
+    await fs.writeJson(manifestPath, manifest, { spaces: 2 });
+    logger.success('Wrote generation manifest', { runId, manifestPath, created: createdMdPaths.length });
+  } catch (e) {
+    logger.warn('Failed to write generation manifest (continuing)', {
+      error: e instanceof Error ? e.message : String(e)
+    });
+  }
 
   return results;
 };

@@ -12,6 +12,8 @@
     "dashboard": "ts-node scripts/morning-routine/dashboard/server.ts",
     "generate": "ts-node scripts/morning-routine/tasks/generate-batch.ts",
     "generate:batch": "ts-node scripts/morning-routine/tasks/generate-batch.ts",
+    "seo:one": "ts-node scripts/morning-routine/tasks/seo-review-one.ts",
+    "seo:batch": "ts-node scripts/morning-routine/tasks/seo-review-batch.ts",
     "publish:drafts": "ts-node scripts/morning-routine/tasks/publish-drafts.ts",
     "lint": "hugo --printPathWarnings --printMemoryUsage",
     "validate:env": "ts-node scripts/validate-env.ts",

@@ -1,12 +1,13 @@
 ---
-title: Totem Red Admiral In A Flower Field Standing
+title: Butterfly With Intricate Wings And Wildflowers
 description: >-
-  Free printable cozy red admiral in a flower field standing coloring page in
-  totem style. Perfect for all ages. Download and print for free!
+  Download this free butterfly coloring page featuring an intricately patterned
+  butterfly and a bed of wildflowers in Totem style. Perfect for relaxation.
 pinterest_description: >-
-  Free printable cozy red admiral in a flower field standing coloring page in
-  totem style. Easy-to-color lines perfect for markers. Great for kids, adults,
-  and all skill levels. Download for free now!
+  Unwind with this beautiful butterfly coloring page, showcasing a majestic
+  butterfly with intricate spiral and floral patterns on its wings. A vibrant
+  bed of wildflowers and lush leaves creates a serene natural scene. Perfect for
+  adult coloring, relaxation, and stress relief.
 date: 2025-12-16T02:37:16.871Z
 type: coloring-pages
 draft: false
@@ -21,10 +22,14 @@ image_url: >-
   https://imagedelivery.net/G92SwfasiUv-usR1s4VYvA/a89b3859-d3e1-43c0-ba5c-8917f5bc3000/desktop
 download_url: 'https://img.paperpause.app/butterflies/cozy-butterflie-coloring-page-7595.pdf'
 r2_original: 'https://img.paperpause.app/butterflies/cozy-butterflie-coloring-page-7595.png'
-prompt: Cozy Red Admiral (Vanessa atalanta) in a flower field standing
+prompt: >-
+  A large butterfly with wings spread wide, showcasing intricate patterns of
+  spirals, dots, and small flowers. It hovers above a dense bed of varied
+  wildflowers and lush leaves.
 tags:
   - Totem
 has_pdf: true
+pinterest_title: Butterfly Totem Pattern Flowers Coloring Page
 ---
 
 A beautiful Butterflies coloring page in Totem style.

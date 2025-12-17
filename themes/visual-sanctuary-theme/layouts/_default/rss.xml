@@ -24,7 +24,7 @@
     <lastBuildDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</lastBuildDate>{{ end }}
     {{ range $pages }}
     <item>
-      <title>{{ .Title }}</title>
+      <title>{{ .Params.pinterest_title | default .Title }}</title>
       <link>{{ .Permalink }}</link>
       <pubDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</pubDate>
       {{ with .Site.Author.email }}<author>{{.}}{{ with $.Site.Author.name }} ({{.}}){{end}}</author>{{end}}
@@ -37,8 +37,8 @@
       {{- $imageUrl := printf "https://imagedelivery.net/%s/%s/rss" $.Site.Params.cf_images_hash .Params.cf_image_id }}
       <enclosure url="{{ $imageUrl }}" type="image/png" length="0" />
       <media:content url="{{ $imageUrl }}" medium="image" width="1000" height="1500">
-        <media:title>{{ .Title }}</media:title>
-        <media:description>{{ .Description }}</media:description>
+        <media:title>{{ .Params.pinterest_title | default .Title }}</media:title>
+        <media:description>{{ .Params.pinterest_description | default .Description }}</media:description>
       </media:content>
       {{- else if .Params.image_url }}
       <enclosure url="{{ .Params.image_url }}" type="image/png" length="0" />

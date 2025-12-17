@@ -1,0 +1,105 @@
+name: Daily Generate & Optimize Coloring Pages
+
+on:
+  schedule:
+    # Run at 5 AM UTC (adjust for your timezone if needed)
+    - cron: '0 5 * * *'
+  workflow_dispatch:  # Allow manual trigger for testing
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  generate-and-optimize:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for commits
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create .dev.vars from GitHub Secrets
+        run: |
+          cat << 'EOF' > .dev.vars
+          GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
+          R2_ACCOUNT_ID=${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID=${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY=${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET_NAME=${{ secrets.R2_BUCKET_NAME }}
+          R2_PUBLIC_URL=${{ secrets.R2_PUBLIC_URL }}
+          CF_IMAGES_ACCOUNT_ID=${{ secrets.CF_IMAGES_ACCOUNT_ID }}
+          CF_IMAGES_API_TOKEN=${{ secrets.CF_IMAGES_API_TOKEN }}
+          CF_IMAGES_ACCOUNT_HASH=${{ secrets.CF_IMAGES_ACCOUNT_HASH }}
+          EOF
+
+      - name: Validate environment
+        run: npm run validate:env
+
+      # Step 1: Generate batch of images (critical - must succeed)
+      - name: Generate daily coloring pages
+        id: generate
+        run: |
+          GENERATION_RUN_ID=$(date +%Y-%m-%dT%H-%M-%SZ)
+          echo "run_id=$GENERATION_RUN_ID" >> $GITHUB_OUTPUT
+          GENERATION_RUN_ID=$GENERATION_RUN_ID npx ts-node scripts/morning-routine/tasks/generate-batch.ts animals Butterflies 5
+        env:
+          GENERATION_RUN_ID: ${{ github.run_id }}-${{ github.run_number }}
+
+      # Step 2: SEO optimization (best effort - don't fail workflow if SEO review fails)
+      - name: Optimize SEO metadata
+        id: seo-review
+        run: |
+          MANIFEST_FILE="scripts/morning-routine/.runs/${{ steps.generate.outputs.run_id }}.json"
+          if [ -f "$MANIFEST_FILE" ]; then
+            npx ts-node scripts/morning-routine/tasks/seo-review-batch.ts animals Butterflies --manifest "$MANIFEST_FILE"
+          else
+            echo "⚠️  No manifest found, reviewing all files in collection..."
+            npx ts-node scripts/morning-routine/tasks/seo-review-batch.ts animals Butterflies
+          fi
+        continue-on-error: true  # Don't fail workflow if SEO review fails
+
+      # Step 3: Commit and push generated content
+      - name: Commit generated content
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          git add -A content/
+          
+          # Check if there are changes
+          if git diff --staged --quiet; then
+            echo "✓ No changes to commit"
+          else
+            git commit -m "🎨 Generate daily coloring pages [automated by Actions]"
+            git push
+            echo "✓ Pushed changes"
+          fi
+
+      # Step 4: Report results
+      - name: Report workflow summary
+        if: always()
+        run: |
+          echo "## Daily Generation Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Step | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Generation | ${{ steps.generate.outcome }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| SEO Optimization | ${{ steps.seo-review.outcome }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Run ID:** ${{ steps.generate.outputs.run_id }}" >> $GITHUB_STEP_SUMMARY
+
+      # Step 5: Notify on critical failure
+      - name: Notify on generation failure
+        if: failure() && steps.generate.outcome == 'failure'
+        run: |
+          echo "❌ **CRITICAL**: Daily generation failed!"
+          echo "Check the workflow logs for details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
