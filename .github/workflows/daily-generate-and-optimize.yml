@@ -295,11 +295,7 @@ jobs:
             const timestamp = new Date().toISOString();
             const runUrl = `${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}`;
 
-            const comment = `${emoji} **${status}** — ${timestamp}
-
-${details}
-
-**Run:** [${{ github.run_id }}](${runUrl})`;
+            const comment = emoji + ' **' + status + '** — ' + timestamp + '\n\n' + details + '\n\n**Run:** [${{ github.run_id }}](' + runUrl + ')';
 
             await github.rest.issues.createComment({
               owner,
