@@ -1,4 +1,4 @@
-<div id="pp-cookie-banner" class="!fixed !bottom-0 !left-0 !right-0 !top-auto bg-slate-900 text-slate-300 shadow-2xl border-t border-slate-700 !z-[9999]" role="dialog" aria-labelledby="pp-cookie-title" aria-modal="true" style="display: none;">
+<div id="pp-cookie-banner" class="bg-slate-900 text-slate-300 shadow-2xl border-t border-slate-700" role="dialog" aria-labelledby="pp-cookie-title" aria-modal="true" style="position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999; display: none;">
     <div class="container mx-auto px-4 py-6">
         <div class="max-w-4xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <!-- Text Content -->
@@ -90,9 +90,9 @@
         function showBanner() {
             if (banner) {
                 banner.style.display = 'block';
-                // Focus accept button for accessibility
+                // Focus accept button for accessibility (without scrolling)
                 setTimeout(() => {
-                    if (acceptBtn) acceptBtn.focus();
+                    if (acceptBtn) acceptBtn.focus({ preventScroll: true });
                 }, 100);
             }
         }
