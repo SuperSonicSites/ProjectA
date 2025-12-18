@@ -1,10 +1,11 @@
 ---
-title: "Animals"
-h1: "Free Printable Coloring Pages Of Animals"
-description: "Browse our collection of free printable animal coloring pages."
-image_url: "/images/og-animals.jpg"
-cascade:
-  - _target:
-      kind: section
-    outputs: ["HTML", "RSS", "SECTION_SITEMAP"]
+title: "Cats"
+h1: "Free Printable Coloring Pages Of Cats"
+description: "Explore our collection of kittens and cat coloring pages."
+cms_enabled: true
+cms_batch_size: 5
+cms_frontmatter_template:
+  type: coloring-pages
+  style: ""
+  medium: Markers
 ---
