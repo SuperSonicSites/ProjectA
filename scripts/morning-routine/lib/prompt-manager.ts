@@ -144,6 +144,7 @@ CRITICAL REQUIREMENTS FOR COLORING PAGES:
 - OUTLINES ONLY: Use ONLY black outlines to define shapes. NO filled black areas. NO solid black shapes.
 - ALL AREAS MUST BE COLORABLE: Every part of the image should be an empty space inside black outlines.
 - Background: Pure white (#FFFFFF). NO shading, NO gradients, NO gray tones.
+- NO BORDERS: Do not include any frames, decorative borders, or boxed edges around the image.
 
 VISUAL QUALITY:
 - LINES: Thick, uniform, consistent line weight (4-6px). Solid black outlines only.
@@ -156,7 +157,7 @@ CONTENT:
 
 ATMOSPHERE: Whimsical, inviting, clean line art ready for coloring.`,
     negative_prompt:
-      'transparent background, transparency, color, shading, gray, gradient, photo, realistic, 3d, rendering, text, signature, watermark, blurry, broken lines, thin lines, sketch, messy, horizontal orientation, landscape, filled areas, solid colors',
+      'border, frame, framed, boxed, edges, decorative border, ornate frame, transparent background, transparency, color, shading, gray, gradient, photo, realistic, 3d, rendering, text, signature, watermark, blurry, broken lines, thin lines, sketch, messy, horizontal orientation, landscape, filled areas, solid colors',
     attributes: {
       tones: ['Cozy', 'Playful', 'Sleepy', 'Adventurous', 'Elegant', 'Curious', 'Grumpy', 'Zen'],
       types: [],

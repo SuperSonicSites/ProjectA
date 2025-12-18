@@ -37,7 +37,7 @@
                 {{ if .Params.image_url }}
                 <img src="{{ .Params.image_url }}" alt="{{ .Title }}" class="w-full h-auto border border-slate-100">
                 {{ else }}
-                <div class="aspect-[3/4] bg-slate-50 flex items-center justify-center text-slate-300 font-mono">
+                <div class="aspect-[2/3] bg-slate-50 flex items-center justify-center text-slate-300 font-mono">
                     [High Res Image Placeholder]
                 </div>
                 {{ end }}
@@ -113,7 +113,7 @@
         {{ $related := .Site.RegularPages.Related . | first 6 }}
         {{ range $related }}
         <a href="{{ .RelPermalink }}" class="block group">
-            <div class="aspect-[3/4] bg-stone-100 rounded-lg mb-2 relative overflow-hidden">
+            <div class="aspect-[2/3] bg-stone-100 rounded-lg mb-2 relative overflow-hidden">
                 {{ if .Params.image_url }}<img src="{{.Params.image_url}}" class="w-full h-full object-cover">{{end}}
             </div>
             <h4 class="font-bold text-sm text-slate-700 truncate">{{ .Title }}</h4>
