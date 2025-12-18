@@ -54,7 +54,10 @@ async function validateTaxonomy(): Promise<ValidationResult> {
   logger.info(`Found ${mdFiles.length} markdown files to validate`);
 
   for (const file of mdFiles) {
-    if (file.includes('_index') || !file.includes(path.sep + 'animals' + path.sep)) {
+    // Normalize path to use forward slashes for cross-platform consistency
+    const normalizedFile = file.replace(/\\/g, '/');
+
+    if (normalizedFile.includes('_index') || !normalizedFile.includes('/animals/')) {
       continue; // Skip section index files and non-animal content for now
     }
 
@@ -91,7 +94,7 @@ async function validateTaxonomy(): Promise<ValidationResult> {
 
       // Validate collection based on directory structure (not frontmatter)
       // File should be in content/<category>/<collection>/filename.md
-      const pathParts = file.split(path.sep);
+      const pathParts = normalizedFile.split('/');
       const categoryIndex = pathParts.indexOf('content') + 1;
       const collectionIndex = categoryIndex + 1;
       
