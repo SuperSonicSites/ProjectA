@@ -67,12 +67,30 @@ jobs:
           fi
         continue-on-error: true
 
+      - name: Stage newly generated files (this collection only)
+        id: stage
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf staging
+          mkdir -p staging
+
+          # Copy only untracked files created during this job, under this collection
+          # Uses -z (null terminator) to handle any filenames safely
+          git ls-files -z --others --exclude-standard -- "content/animals/${{ matrix.collection }}/" \
+            | xargs -0 -r cp --parents -t staging
+
+          # Count files for conditional upload
+          COUNT="$(find staging/content/animals/${{ matrix.collection }} -type f 2>/dev/null | wc -l | tr -d ' ')"
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+          echo "Staged $COUNT file(s)"
+
       - name: Upload generated content as artifact
+        if: steps.stage.outputs.count != '0'
         uses: actions/upload-artifact@v4
         with:
           name: content-${{ matrix.collection }}
-          # Use a glob to preserve the directory structure relative to the root
-          path: content/animals/${{ matrix.collection }}/*.md
+          path: staging/
           retention-days: 1
 
   commit:
