@@ -1,7 +1,7 @@
 {
   "collection": "sharks",
   "category": "animals",
-  "base": "TYPE: Black and white line art coloring page - OUTLINES ONLY.\nSTYLE: Clean vector illustration, children's book style.\n\nCRITICAL REQUIREMENTS FOR COLORING PAGES:\n- OUTLINES ONLY: Use ONLY black outlines to define shapes. NO filled black areas. NO solid black shapes.\n- ALL AREAS MUST BE COLORABLE: Every part of the image should be an empty space inside black outlines.\n- Background: Pure white (#FFFFFF). NO shading, NO gradients, NO gray tones.\n- NO BORDERS: Do not include any frames, decorative borders, or boxed edges around the image.\n- Aspect ratio: 3:4 portrait orientation (3072x4096 pixels), 4K resolution. aspectRatio = \"3:4\", Resolution: \"4K\", 3:4 aspect ratio, high-resolution 4K detail.",
+  "base": "TYPE: Black and white line art coloring page - OUTLINES ONLY.\nSTYLE: Clean vector illustration, children's book style.\n\nCRITICAL REQUIREMENTS FOR COLORING PAGES:\n- OUTLINES ONLY: Use ONLY black outlines to define shapes. NO filled black areas. NO solid black shapes.\n- ALL AREAS MUST BE COLORABLE: Every part of the image should be an empty space inside black outlines.\n- Background: Pure white (#FFFFFF). NO shading, NO gradients, NO gray tones.\n- NO BORDERS: Do not include any frames, decorative borders, or boxed edges around the image.",
   "negative_prompt": "border, frame, framed, boxed, edges, decorative border, ornate frame, die cut, contour, margin line, sticker edge, transparent background, transparency, color, shading, gray, gradient, photo, realistic, 3d, rendering, text, signature, watermark, blurry, broken lines, thin lines, sketch, messy, horizontal orientation, landscape, filled areas, solid colors",
   "attributes": {
     "tones": [

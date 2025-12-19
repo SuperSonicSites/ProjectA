@@ -1,0 +1,5 @@
+{{ $count := len .RegularPages }}
+{{ range .Sections }}
+{{ $count = add $count (partial "count-pages.html" .) }}
+{{ end }}
+{{ return $count }}

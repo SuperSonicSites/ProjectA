@@ -7,7 +7,7 @@ cms_frontmatter_template:
   type: coloring-pages
   style: ''
   medium: Markers
-description: Explore our collection of horse coloring pages.
+description: Explore our collection of horse coloring pages for kids and adults.
 image_url: ''
 ---
 

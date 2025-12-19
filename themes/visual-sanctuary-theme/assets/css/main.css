@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 [x-cloak] {
-    display: none !important;
+  display: none !important;
 }
 
 /* Accessibility: Screen reader only content */
@@ -44,6 +44,18 @@ a:focus-visible {
   @media (min-width: 1024px) {
     .masonry-grid {
       column-count: 4;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .masonry-grid {
+      column-count: 5;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .masonry-grid {
+      column-count: 6;
     }
   }
 

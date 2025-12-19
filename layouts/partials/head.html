@@ -3,11 +3,13 @@
 {{- if .IsHome -}}
 <title>Free Printable Coloring Pages - PaperPause</title>
 {{- else if .IsSection -}}
-<title>{{ if gt (len .Pages) 0 }}{{ len .Pages }} {{ end }}Free Printable Coloring Pages Of {{ .Title }} - PaperPause
-</title>
+{{- $count := len .RegularPagesRecursive -}}
+<title>{{ if gt $count 0 }}{{ $count }} {{ end }}Free Printable Coloring Page{{ if ne $count 1 }}s{{ end }} Of {{ .Title
+    }} - PaperPause</title>
 {{- else if eq .Kind "term" -}}
-<title>{{ if gt (len .Pages) 0 }}{{ len .Pages }} {{ end }}Free Printable Coloring Pages Of {{ .Title }} - PaperPause
-</title>
+{{- $count := len .RegularPagesRecursive -}}
+<title>{{ if gt $count 0 }}{{ $count }} {{ end }}Free Printable Coloring Page{{ if ne $count 1 }}s{{ end }} Of {{ .Title
+    }} - PaperPause</title>
 {{- else if eq .Type "coloring-pages" -}}
 {{/* For coloring pages, add "Coloring Page" for SEO */}}
 {{ $cleanTitle := .Title }}
