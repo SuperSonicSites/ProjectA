@@ -18,41 +18,43 @@
                 <h3 class="font-bold text-slate-900 mb-4 uppercase text-sm tracking-wider">Filter By Tags</h3>
                 <div class="space-y-2" id="tag-filters">
                     <!-- Show All option -->
-                    <label class="flex items-center justify-between cursor-pointer hover:bg-slate-50 p-2 rounded transition">
+                    <label
+                        class="flex items-center justify-between cursor-pointer hover:bg-slate-50 p-2 rounded transition">
                         <div class="flex items-center space-x-2">
-                            <input type="radio" name="tag-filter" value="" class="form-radio text-teal-600" checked>
+                            <input type="radio" name="tag-filter" value="" checked>
                             <span>Show All</span>
                         </div>
                         <span class="text-xs text-slate-400">({{ len .Pages }})</span>
                     </label>
-                    
+
                     <!-- Dynamically generate tag filters -->
                     {{ $tags := slice }}
                     {{ range .Pages }}
-                        {{ with .Params.tags }}
-                            {{ range . }}
-                                {{ $tags = $tags | append . }}
-                            {{ end }}
-                        {{ end }}
+                    {{ with .Params.tags }}
+                    {{ range . }}
+                    {{ $tags = $tags | append . }}
                     {{ end }}
-                    
+                    {{ end }}
+                    {{ end }}
+
                     {{ range $tags | uniq }}
-                        {{ $tag := . }}
-                        {{ $tagCount := 0 }}
-                        {{ range $.Pages }}
-                            {{ with .Params.tags }}
-                                {{ if in . $tag }}
-                                    {{ $tagCount = add $tagCount 1 }}
-                                {{ end }}
-                            {{ end }}
-                        {{ end }}
-                        <label class="flex items-center justify-between cursor-pointer hover:bg-slate-50 p-2 rounded transition">
-                            <div class="flex items-center space-x-2">
-                                <input type="radio" name="tag-filter" value="{{ $tag }}" class="form-radio text-teal-600">
-                                <span>{{ $tag }}</span>
-                            </div>
-                            <span class="text-xs text-slate-400">({{ $tagCount }})</span>
-                        </label>
+                    {{ $tag := . }}
+                    {{ $tagCount := 0 }}
+                    {{ range $.Pages }}
+                    {{ with .Params.tags }}
+                    {{ if in . $tag }}
+                    {{ $tagCount = add $tagCount 1 }}
+                    {{ end }}
+                    {{ end }}
+                    {{ end }}
+                    <label
+                        class="flex items-center justify-between cursor-pointer hover:bg-slate-50 p-2 rounded transition">
+                        <div class="flex items-center space-x-2">
+                            <input type="radio" name="tag-filter" value="{{ $tag }}">
+                            <span>{{ $tag }}</span>
+                        </div>
+                        <span class="text-xs text-slate-400">({{ $tagCount }})</span>
+                    </label>
                     {{ end }}
                 </div>
             </div>
@@ -67,19 +69,17 @@
             {{ else }}
             <div class="masonry-grid">
                 {{ range .Pages }}
-                <div class="masonry-item" data-tags="{{ with .Params.tags }}{{ delimit . "," }}{{ end }}">
+                <div class="masonry-item" data-tags="{{ with .Params.tags }}{{ delimit . " ," }}{{ end }}">
                     <a href="{{ .RelPermalink }}"
                         class="block group bg-white rounded-xl shadow-sm hover:shadow-lg transition overflow-hidden">
                         <div class="relative bg-white aspect-[3/4]">
                             <!-- Use CF Images thumbnail variant for fast loading -->
                             {{ if .Params.cf_image_id }}
-                            <img 
-                                src="https://imagedelivery.net/{{ $.Site.Params.cf_images_hash }}/{{ .Params.cf_image_id }}/thumbnail" 
-                                alt="{{ .Title }}" 
-                                class="w-full h-full object-contain"
-                                loading="lazy">
+                            <img src="https://imagedelivery.net/{{ $.Site.Params.cf_images_hash }}/{{ .Params.cf_image_id }}/thumbnail"
+                                alt="{{ .Title }}" class="w-full h-full object-contain" loading="lazy">
                             {{ else if .Params.image_url }}
-                            <img src="{{ .Params.image_url }}" alt="{{ .Title }}" class="w-full h-full object-contain" loading="lazy">
+                            <img src="{{ .Params.image_url }}" alt="{{ .Title }}" class="w-full h-full object-contain"
+                                loading="lazy">
                             {{ else }}
                             <div class="w-full h-full bg-slate-50 flex items-center justify-center text-slate-300">No
                                 Image</div>
@@ -103,28 +103,28 @@
             {{ end }}
         </div>
     </div>
-    
+
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const filterInputs = document.querySelectorAll('input[name="tag-filter"]');
-        const masonryItems = document.querySelectorAll('.masonry-item');
-        
-        filterInputs.forEach(input => {
-            input.addEventListener('change', function() {
-                const selectedTag = this.value;
-                
-                masonryItems.forEach(item => {
-                    const itemTags = item.getAttribute('data-tags') || '';
-                    
-                    if (selectedTag === '' || itemTags.includes(selectedTag)) {
-                        item.style.display = '';
-                    } else {
-                        item.style.display = 'none';
-                    }
+        document.addEventListener('DOMContentLoaded', function () {
+            const filterInputs = document.querySelectorAll('input[name="tag-filter"]');
+            const masonryItems = document.querySelectorAll('.masonry-item');
+
+            filterInputs.forEach(input => {
+                input.addEventListener('change', function () {
+                    const selectedTag = this.value;
+
+                    masonryItems.forEach(item => {
+                        const itemTags = item.getAttribute('data-tags') || '';
+
+                        if (selectedTag === '' || itemTags.includes(selectedTag)) {
+                            item.style.display = '';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
                 });
             });
         });
-    });
     </script>
 </div>
 {{ end }}

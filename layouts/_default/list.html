@@ -40,75 +40,120 @@
     {{ else }}
     {{- /* Show individual pages in masonry grid */ -}}
     <div class="flex flex-col lg:flex-row gap-8 lg:gap-12">
-        <!-- Sidebar Filter -->
         <aside class="lg:w-64 flex-shrink-0">
-            <div class="lg:sticky lg:top-24 space-y-10">
+            <div class="lg:sticky lg:top-24 pb-6">
+                <details
+                    class="group bg-white rounded-[12px] border border-slate-200/60 shadow-[0_4px_25px_rgba(0,0,0,0.02)] overflow-hidden transition-all duration-300">
+                    <summary
+                        class="flex items-center justify-between cursor-pointer p-2 bg-white hover:bg-slate-50 transition-colors border-b border-transparent group-open:border-slate-100 list-none [&::-webkit-details-marker]:hidden">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 flex items-center justify-center rounded-xl text-teal-600">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                                </svg>
+                            </div>
+                            <span class="font-bold text-slate-800 uppercase text-[11px] tracking-[0.2em]">Filters</span>
+                        </div>
+                        <svg class="w-4 h-4 text-slate-400 transition-transform duration-500 group-open:rotate-180"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </summary>
 
-                <!-- Age Group Filter (Primary) -->
-                <div>
-                    <h3 class="font-bold text-slate-900 mb-4 uppercase text-sm tracking-wider">Age Group</h3>
-                    <div class="flex flex-col gap-3 mb-4">
-                        <label class="w-full cursor-pointer">
-                            <input type="radio" name="age-filter" value="" class="peer sr-only" checked>
-                            <span
-                                class="block w-full px-5 py-3 text-center lg:text-left rounded-xl border-2 border-slate-200 text-base font-semibold bg-white text-slate-700 peer-checked:bg-teal-600 peer-checked:border-teal-600 peer-checked:text-white hover:border-teal-400 transition-all shadow-sm">
-                                All Ages
-                            </span>
-                        </label>
-                        <label class="w-full cursor-pointer">
-                            <input type="radio" name="age-filter" value="Kids" class="peer sr-only">
-                            <span
-                                class="block w-full px-5 py-3 text-center lg:text-left rounded-xl border-2 border-slate-200 text-base font-semibold bg-white text-slate-700 peer-checked:bg-teal-600 peer-checked:border-teal-600 peer-checked:text-white hover:border-teal-400 transition-all shadow-sm">
-                                Kids
-                            </span>
-                        </label>
-                        <label class="w-full cursor-pointer">
-                            <input type="radio" name="age-filter" value="Adults" class="peer sr-only">
-                            <span
-                                class="block w-full px-5 py-3 text-center lg:text-left rounded-xl border-2 border-slate-200 text-base font-semibold bg-white text-slate-700 peer-checked:bg-teal-600 peer-checked:border-teal-600 peer-checked:text-white hover:border-teal-400 transition-all shadow-sm">
-                                Adults
-                            </span>
-                        </label>
+                    <div class="px-7 py-4 space-y-6">
+                        <!-- Age Group Filter -->
+                        <div>
+                            <h3
+                                class="font-bold text-slate-400 mb-4 uppercase text-xs tracking-[0.25em] opacity-80 flex items-center gap-2">
+                                <span class="w-1 h-1 rounded-full bg-teal-400"></span>
+                                Audience
+                            </h3>
+                            <div class="flex flex-col gap-3">
+                                <label
+                                    class="flex items-center gap-1 cursor-pointer group/opt pt-2 mx-2 rounded-xl transition-colors hover:bg-slate-50">
+                                    <div class="relative flex items-center justify-center">
+                                        <input type="radio" name="age-filter" value="" class="peer sr-only" checked>
+
+                                    </div>
+                                    <span
+                                        class="text-[13px] font-medium text-slate-500 peer-checked:text-slate-900 peer-checked:font-bold transition-all leading-none">All
+                                        Ages</span>
+                                </label>
+                                <label
+                                    class="flex items-center gap-1 cursor-pointer group/opt pt-2 mx-2 rounded-xl transition-colors hover:bg-slate-50">
+                                    <div class="relative flex items-center justify-center">
+                                        <input type="radio" name="age-filter" value="Kids" class="peer sr-only">
+
+                                    </div>
+                                    <span
+                                        class="text-[13px] font-medium text-slate-500 peer-checked:text-slate-900 peer-checked:font-bold transition-all leading-none">Kids</span>
+                                </label>
+                                <label
+                                    class="flex items-center gap-1 cursor-pointer group/opt pt-2 mx-2 rounded-xl transition-colors hover:bg-slate-50">
+                                    <div class="relative flex items-center justify-center">
+                                        <input type="radio" name="age-filter" value="Adults" class="peer sr-only">
+
+                                    </div>
+                                    <span
+                                        class="text-[13px] font-medium text-slate-500 peer-checked:text-slate-900 peer-checked:font-bold transition-all leading-none">Adults</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Art Style Filter -->
+                        <div>
+                            <h3
+                                class="font-bold text-slate-400 mb-6 uppercase text-xs tracking-[0.25em] opacity-80 flex items-center gap-2">
+                                <span class="w-1 h-1 rounded-full bg-teal-400"></span>
+                                Visual Style
+                            </h3>
+                            <div class="flex flex-col gap-3">
+                                <!-- Show All option -->
+                                <label
+                                    class="flex items-center gap-1 cursor-pointer group/opt pt-2 mx-2 rounded-xl transition-colors hover:bg-slate-50 style-filter-option"
+                                    data-audience="all">
+                                    <div class="relative flex items-center justify-center">
+                                        <input type="radio" name="style-filter" value="" class="peer sr-only" checked>
+
+                                    </div>
+                                    <span
+                                        class="text-[13px] font-medium text-slate-500 peer-checked:text-slate-900 peer-checked:font-bold transition-all leading-none">All
+                                        Styles</span>
+                                </label>
+
+                                <!-- Dynamically generate style filters -->
+                                {{ $styles := slice }}
+                                {{ range .Pages }}
+                                {{ with .Params.style }}
+                                {{ $styles = $styles | append . }}
+                                {{ end }}
+                                {{ end }}
+
+                                {{ range $styles | uniq }}
+                                {{ $style := . }}
+                                {{ $styleAudience := "Kids" }}
+                                {{ if or (eq $style "Cottagecore") (eq $style "Totem") (eq $style "Magical Realism") }}
+                                {{ $styleAudience = "Adults" }}
+                                {{ end }}
+                                <label
+                                    class="flex items-center gap-1 cursor-pointer group/opt pt-2 mx-2 rounded-xl transition-colors hover:bg-slate-50 style-filter-option"
+                                    data-audience="{{ $styleAudience }}">
+                                    <div class="relative flex items-center justify-center">
+                                        <input type="radio" name="style-filter" value="{{ $style }}"
+                                            class="peer sr-only">
+
+                                    </div>
+                                    <span
+                                        class="text-[13px] font-medium text-slate-500 peer-checked:text-slate-900 peer-checked:font-bold transition-all leading-none">{{
+                                        $style }}</span>
+                                </label>
+                                {{ end }}
+                            </div>
+                        </div>
                     </div>
-                </div>
-
-                <!-- Art Style Filter -->
-                <div>
-                    <h3 class="font-bold text-slate-900 mb-4 uppercase text-sm tracking-wider">Art Style</h3>
-                    <div class="flex flex-col gap-3">
-                        <!-- Show All option -->
-                        <label class="w-full cursor-pointer style-filter-option" data-audience="all">
-                            <input type="radio" name="style-filter" value="" class="peer sr-only" checked>
-                            <span
-                                class="block w-full px-5 text-sm py-3 text-center lg:text-left rounded-xl border-2 border-slate-200 text-base font-semibold bg-white text-slate-700 peer-checked:bg-teal-600 peer-checked:border-teal-600 peer-checked:text-white hover:border-teal-400 transition-all shadow-sm">
-                                All Styles
-                            </span>
-                        </label>
-
-                        <!-- Dynamically generate style filters -->
-                        {{ $styles := slice }}
-                        {{ range .Pages }}
-                        {{ with .Params.style }}
-                        {{ $styles = $styles | append . }}
-                        {{ end }}
-                        {{ end }}
-
-                        {{ range $styles | uniq }}
-                        {{ $style := . }}
-                        {{ $styleAudience := "Kids" }}
-                        {{ if or (eq $style "Cottagecore") (eq $style "Totem") (eq $style "Magical Realism") }}
-                        {{ $styleAudience = "Adults" }}
-                        {{ end }}
-                        <label class="w-full cursor-pointer style-filter-option" data-audience="{{ $styleAudience }}">
-                            <input type="radio" name="style-filter" value="{{ $style }}" class="peer sr-only">
-                            <span
-                                class="block w-full px-5 text-sm py-3 text-center lg:text-left rounded-xl border-2 border-slate-200 text-base font-semibold bg-white text-slate-700 peer-checked:bg-teal-600 peer-checked:border-teal-600 peer-checked:text-white hover:border-teal-400 transition-all shadow-sm">
-                                {{ $style }}
-                            </span>
-                        </label>
-                        {{ end }}
-                    </div>
-                </div>
+                </details>
             </div>
         </aside>
 
@@ -154,22 +199,12 @@
             const masonryItems = document.querySelectorAll('.masonry-item');
             const styleFilterOptions = document.querySelectorAll('.style-filter-option');
 
-            // Function to update visual active states
-            function updateActiveStates(inputs, name) {
-                inputs.forEach(input => {
-                    const label = input.closest('label');
-                    const span = label.querySelector('span');
-                    if (input.checked) {
-                        span.classList.add('bg-teal-600', 'border-teal-600', 'text-white');
-                        span.classList.remove('bg-white', 'text-slate-700', 'border-slate-200');
-                    } else {
-                        span.classList.remove('bg-teal-600', 'border-teal-600', 'text-white');
-                        span.classList.add('bg-white', 'text-slate-700', 'border-slate-200');
-                    }
-                });
+            // Open filters by default on desktop (>= 1024px)
+            const filtersDetails = document.querySelector('details.group');
+            if (filtersDetails && window.innerWidth >= 1024) {
+                filtersDetails.open = true;
             }
 
-            // Function to filter style options based on selected age group
             function filterStyleOptions() {
                 const selectedAge = document.querySelector('input[name="age-filter"]:checked').value;
                 const selectedStyle = document.querySelector('input[name="style-filter"]:checked').value;
@@ -204,18 +239,11 @@
                         }
                     }
                 });
-
-                // Update visual states after filtering
-                updateActiveStates(styleInputs, 'style');
             }
 
             function updateFilters() {
                 const selectedStyle = document.querySelector('input[name="style-filter"]:checked').value;
                 const selectedAge = document.querySelector('input[name="age-filter"]:checked').value;
-
-                // Update visual states
-                updateActiveStates(styleInputs, 'style');
-                updateActiveStates(ageInputs, 'age');
 
                 // Filter masonry items
                 masonryItems.forEach(item => {
@@ -233,10 +261,8 @@
                 });
             }
 
-            // Initialize active states on page load
-            updateActiveStates(styleInputs, 'style');
-            updateActiveStates(ageInputs, 'age');
-            filterStyleOptions(); // Initial filter of style options
+            // Initialize on page load
+            filterStyleOptions();
 
             styleInputs.forEach(input => {
                 input.addEventListener('change', updateFilters);
@@ -244,8 +270,8 @@
 
             ageInputs.forEach(input => {
                 input.addEventListener('change', function () {
-                    filterStyleOptions(); // Filter style options when age changes
-                    updateFilters(); // Update content filtering
+                    filterStyleOptions();
+                    updateFilters();
                 });
             });
         });
