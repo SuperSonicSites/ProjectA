@@ -148,11 +148,11 @@ export function createDefaultPrompt(
 STYLE: Clean vector illustration, children's book style.
 
 CRITICAL REQUIREMENTS FOR COLORING PAGES:
+- ASPECT RATIO: 3:4 portrait orientation. TALL vertical format in 2K resolution.
 - OUTLINES ONLY: Use ONLY black outlines to define shapes. NO filled black areas. NO solid black shapes.
 - ALL AREAS MUST BE COLORABLE: Every part of the image should be an empty space inside black outlines.
 - Background: Pure white (#FFFFFF). NO shading, NO gradients, NO gray tones.
 - NO BORDERS: Do not include any frames, decorative borders, or boxed edges around the image.
-- ASPECT RATIO: 3:4 portrait orientation (3072x4096 pixels), 4K resolution. aspectRatio = "3:4", Resolution: "4K", 3:4 aspect ratio, high-resolution 4K detail.
 
 VISUAL QUALITY:
 - LINES: Thick, uniform, consistent line weight (4-6px). Solid black outlines only.

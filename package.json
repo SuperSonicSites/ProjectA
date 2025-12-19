@@ -5,9 +5,9 @@
   "scripts": {
     "dev": "npm run build:css && hugo server --disableFastRender",
     "build:css": "tailwindcss -i ./themes/visual-sanctuary-theme/assets/css/main.css -o ./static/css/main.css --minify",
-    "build:hugo": "hugo --minify",
+    "build:hugo": "hugo --minify --gc",
     "build:search": "npx pagefind --site public",
-    "build": "npm run build:css && npm run build:hugo && npm run build:search",
+    "build": "npm run clean && npm run build:css && npm run build:hugo && npm run build:search",
     "preview": "npm run build && npx wrangler pages dev public",
     "dashboard": "ts-node scripts/morning-routine/dashboard/server.ts",
     "generate": "ts-node scripts/morning-routine/tasks/generate-batch.ts",
@@ -19,7 +19,7 @@
     "validate:env": "ts-node scripts/validate-env.ts",
     "validate:taxonomy": "ts-node scripts/validate-taxonomy.ts",
     "validate": "npm run validate:env && npm run validate:taxonomy",
-    "clean": "rm -rf public resources"
+    "clean": "powershell -Command \"if (Test-Path public) { Remove-Item -Recurse -Force public }; if (Test-Path resources) { Remove-Item -Recurse -Force resources }\""
   },
   "dependencies": {
     "alpinejs": "^3.13.3",

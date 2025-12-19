@@ -38,7 +38,7 @@ export const generateImage = async (prompt: string, negativePrompt?: string): Pr
                     },
 
                     // Model behavior controls
-                    temperature: 1.0          // Recommended default
+                    temperature: 0.7          // Stricter adherence to instructions
                 } as any
             });
 
@@ -50,7 +50,7 @@ export const generateImage = async (prompt: string, negativePrompt?: string): Pr
 
             // Generate image using Gemini with image generation capability
             // Strongly emphasize 3:4 aspect ratio at 3072×4096 pixels resolution in the prompt
-            const aspectRatioPrompt = `${fullPrompt}\n\n[CRITICAL: aspectRatio = "3:4", Resolution: "4K", 3:4 aspect ratio, high-resolution 4K detail. Image must be in 3:4 PORTRAIT aspect ratio at 3072×4096 pixels resolution. VERTICAL format. Height must be exactly 1.33x the width. Like a standard coloring page - TALL, not square. Minimum dimensions: 3072 pixels wide × 4096 pixels tall.]`;
+            const aspectRatioPrompt = `${fullPrompt}\n\n[CRITICAL: ASPECT RATIO = "3:4". THIS IMAGE MUST BE TALL PORTRAIT. It MUST be TALLER than it is wide. Do NOT output a square image. Minimum resolutions: 2K.]`;
             
             const result = await model.generateContent(aspectRatioPrompt);
 
