@@ -16,6 +16,7 @@ pinterestTag = "2613274913432"
 
 [taxonomies]
   category = "categories"  # Silo (Animals)
+  tag = "tags"             # Content tags for AI discovery
 
 [related]
   includeNewer = true
@@ -69,6 +70,10 @@ pinterestTag = "2613274913432"
     extended = true
     min = "0.110.0"
 
+[mediaTypes]
+  [mediaTypes."text/markdown"]
+    suffixes = ["md"]
+
 [outputFormats]
   [outputFormats.SECTION_SITEMAP]
     mediaType = "application/xml"
@@ -80,7 +85,15 @@ pinterestTag = "2613274913432"
     baseName = "pages-sitemap"
     isPlainText = false
     isHTML = false
+  [outputFormats.MARKDOWN]
+    mediaType = "text/markdown"
+    baseName = "index"
+    isPlainText = true
+    isHTML = false
 
 [outputs]
-  home = ["HTML", "RSS", "SITEMAP", "PAGES_SITEMAP"]
-  section = ["HTML", "RSS", "SECTION_SITEMAP"]
+  home = ["HTML", "RSS", "SITEMAP", "PAGES_SITEMAP", "MARKDOWN"]
+  section = ["HTML", "RSS", "SECTION_SITEMAP", "MARKDOWN"]
+  page = ["HTML", "MARKDOWN"]
+  taxonomy = ["HTML", "RSS", "MARKDOWN"]
+  term = ["HTML", "RSS", "MARKDOWN"]

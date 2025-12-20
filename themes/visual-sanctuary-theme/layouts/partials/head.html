@@ -23,6 +23,9 @@
 <meta name="description"
     content="{{ if .Description }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}">
 <link rel="canonical" href="{{ .Permalink }}" />
+{{ with .OutputFormats.Get "MARKDOWN" -}}
+<link rel="alternate" type="{{ .MediaType.Type }}" href="{{ .Permalink }}" title="Markdown" />
+{{- end }}
 
 {{/* Data Preparation */}}
 {{ $title := .Title }}

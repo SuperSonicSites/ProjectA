@@ -1,0 +1,49 @@
+# PaperPause
+
+PaperPause is a library of high-quality, free printable coloring pages for kids and adults, organized by subject matter and artistic style.
+
+## AI-friendly Markdown endpoints
+
+These URLs serve clean, structured Markdown representations of our content, optimized for AI agents and answer engines to ingest.
+
+### Home and Main Collections
+
+- https://paperpause.app/index.md — Site index with all top-level collections
+
+### Animals Collection
+
+- https://paperpause.app/animals/index.md — All animals (aggregate)
+- https://paperpause.app/animals/cats/index.md — Cats
+- https://paperpause.app/animals/dogs/index.md — Dogs
+- https://paperpause.app/animals/butterflies/index.md — Butterflies
+- https://paperpause.app/animals/horses/index.md — Horses
+- https://paperpause.app/animals/sharks/index.md — Sharks
+
+### Taxonomies
+
+- https://paperpause.app/tags/index.md — All content tags
+- https://paperpause.app/categories/index.md — All categories
+
+## XML Sitemaps (for search engines)
+
+- https://paperpause.app/sitemap.xml — Main sitemap index
+- https://paperpause.app/pages-sitemap.xml — Static pages sitemap
+
+## How to Use
+
+Each Markdown endpoint contains:
+
+1. **Page/Section Header** — Title and description
+2. **Metadata Block** — Structured fields: canonical HTML URL, style, audience, tags, publication date
+3. **Asset Links** — Downloadable PDF and source image URLs
+4. **Image Embedding** — Markdown image tag pointing to the coloring page
+5. **Indexed Content** — For collection pages, lists of child items with links to their own Markdown endpoints
+
+This structure allows AI agents to:
+- Discover and understand our entire content hierarchy
+- Extract rich metadata without parsing HTML
+- Link directly to assets (PDFs, images)
+- Maintain reference links to HTML versions for users
+
+For questions or API requests, visit https://paperpause.app/contact/
+
