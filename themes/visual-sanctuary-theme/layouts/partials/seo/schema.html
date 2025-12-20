@@ -201,7 +201,12 @@
       "@id": "{{ .Site.BaseURL }}#organization",
       "name": "{{ .Site.Title }}",
       "url": "{{ .Site.BaseURL }}",
-      "description": "{{ .Site.Params.description | default "Free printable coloring pages for adults and kids." }}"
+      "description": "{{ .Site.Params.description | default "Free printable coloring pages for adults and kids." }}",
+      "logo": "{{ .Site.Params.logo }}",
+      "sameAs": [
+        "https://www.pinterest.com/paperpause/",
+        "https://www.facebook.com/paperpause/"
+      ]
     }
     {{ end }}
 
@@ -291,6 +296,12 @@
         "url": "{{ .Site.BaseURL }}"
       },
       "author": {
+        "@type": "Organization",
+        "@id": "{{ .Site.BaseURL }}#organization",
+        "name": "{{ .Site.Title }}",
+        "url": "{{ .Site.BaseURL }}"
+      },
+      "creator": {
         "@type": "Organization",
         "@id": "{{ .Site.BaseURL }}#organization",
         "name": "{{ .Site.Title }}",
