@@ -98,6 +98,28 @@
             {{ .Description }}
         </p>
 
+        <!-- Image Details Block (Prompt for thin-content mitigation) - Collapsible Toggle -->
+        {{ with .Params.prompt }}
+        <style>
+            /* Image Details toggle arrow rotation */
+            details > summary svg {
+                transition: transform 200ms ease-in-out;
+            }
+            details[open] > summary svg {
+                transform: rotate(180deg);
+            }
+        </style>
+        <details class="mt-6 mb-8">
+            <summary class="cursor-pointer list-none p-4 bg-slate-50 rounded-lg border border-slate-100 hover:bg-slate-100 transition-colors select-none flex items-center justify-between" role="button" aria-expanded="false" aria-label="Toggle Image Details">
+                <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider">Image Details</h3>
+                <svg class="w-5 h-5 text-slate-600 transition-transform duration-200 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </summary>
+            <p class="text-sm text-slate-600 italic p-4">"{{ . | plainify | htmlEscape }}"</p>
+        </details>
+        {{ end }}
+
         <!-- Desktop Action (Hidden on Mobile) -->
         <div class="hidden md:block space-y-4 mb-12" data-track-location="desktop_sidebar">
             <a href="{{ .Params.download_url | default .Params.r2_original }}" download="{{ .Title | urlize }}.pdf"
@@ -130,9 +152,9 @@
         {{ range $related }}
         <a href="{{ .RelPermalink }}" class="block group">
             <div class="aspect-[3/4] bg-stone-100 rounded-lg mb-2 relative overflow-hidden">
-                {{ if .Params.image_url }}<img src="{{.Params.image_url}}" class="w-full h-full object-cover">{{end}}
+                {{ if .Params.image_url }}<img src="{{.Params.image_url}}" alt="Coloring page of {{ .Title }}" class="w-full h-full object-cover" loading="lazy" decoding="async" width="300" height="400">{{end}}
             </div>
-            <h4 class="font-bold text-sm text-slate-700 truncate">{{ .Title }}</h4>
+            <h3 class="font-bold text-sm text-slate-700 truncate">{{ .Title }}</h3>
         </a>
         {{ end }}
     </div>
