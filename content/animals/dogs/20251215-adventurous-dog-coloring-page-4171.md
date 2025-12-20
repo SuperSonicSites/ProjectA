@@ -21,8 +21,6 @@ image_url: >-
 download_url: 'https://img.paperpause.app/dogs/adventurous-dog-coloring-page-4171.pdf'
 r2_original: 'https://img.paperpause.app/dogs/adventurous-dog-coloring-page-4171.png'
 prompt: Adventurous Dalmatian in a garden resting
-tags:
-  - Adventurous
 has_pdf: true
 slug: adventurous-dog-coloring-page-4171
 audience: Kids

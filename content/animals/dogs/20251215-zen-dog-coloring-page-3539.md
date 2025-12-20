@@ -21,8 +21,6 @@ image_url: >-
 download_url: 'https://img.paperpause.app/dogs/zen-dog-coloring-page-3539.pdf'
 r2_original: 'https://img.paperpause.app/dogs/zen-dog-coloring-page-3539.png'
 prompt: Zen Havanese in a home baking
-tags:
-  - Zen
 has_pdf: true
 slug: zen-dog-coloring-page-3539
 audience: Kids

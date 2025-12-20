@@ -74,16 +74,9 @@
         {{ $collectionImage = $firstPage.Params.image_url | absURL }}
       {{ end }}
     {{ end }}
-    {{/* Build keywords from categories and common tags */}}
+    {{/* Build keywords from categories */}}
     {{ $keywords := slice }}
     {{ if .Params.categories }}{{ $keywords = $keywords | append .Params.categories }}{{ end }}
-    {{ range .Pages }}
-      {{ if .Params.tags }}
-        {{ range .Params.tags }}
-          {{ $keywords = $keywords | append . }}
-        {{ end }}
-      {{ end }}
-    {{ end }}
     {{ $keywords = $keywords | uniq | first 10 }}
     {{ if $collectionImage }}
     ,
@@ -282,7 +275,6 @@
       {{ end }}
       {{ $keywords := slice }}
       {{ if .Params.categories }}{{ $keywords = $keywords | append .Params.categories }}{{ end }}
-      {{ if .Params.tags }}{{ $keywords = $keywords | append .Params.tags }}{{ end }}
       {{ if gt (len $keywords) 0 }}
       ,"keywords": "{{ delimit $keywords ", " }}"
       {{ end }}

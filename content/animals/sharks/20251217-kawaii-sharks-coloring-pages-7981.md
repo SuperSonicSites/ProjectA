@@ -20,8 +20,6 @@ image_url: >-
 download_url: 'https://img.paperpause.app/sharks/kawaii-sharks-coloring-pages-7981.pdf'
 r2_original: 'https://img.paperpause.app/sharks/kawaii-sharks-coloring-pages-7981.png'
 prompt: Fierce Mako Shark in a Deep Sea Cave Swimming
-tags:
-  - Kawaii
 slug: kawaii-sharks-coloring-pages-7981
 audience: Kids
 ---

@@ -25,8 +25,6 @@ prompt: >-
   A graceful Swallowtail butterfly with intricate wing patterns and long elegant
   tails is depicted flying amidst swirling clouds, delicate blooming flowers,
   and ornamental vines.
-tags:
-  - Magical Realism
 slug: swallowtail-butterfly-flying-clouds-for-adults
 pinterest_title: Swallowtail Butterfly Magical Realism Clouds Flowers Coloring Page
 ---

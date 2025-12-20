@@ -22,8 +22,6 @@ image_url: >-
 download_url: 'https://img.paperpause.app/dogs/sleepy-dog-coloring-page-0027.pdf'
 r2_original: 'https://img.paperpause.app/dogs/sleepy-dog-coloring-page-0027.png'
 prompt: Sleepy Chihuahua in a beach baking
-tags:
-  - Sleepy
 has_pdf: true
 slug: sleepy-dog-coloring-page-0027
 audience: Kids

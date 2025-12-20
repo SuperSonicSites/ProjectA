@@ -21,8 +21,6 @@ image_url: >-
 download_url: 'https://img.paperpause.app/dogs/curious-dog-coloring-page-7534.pdf'
 r2_original: 'https://img.paperpause.app/dogs/curious-dog-coloring-page-7534.png'
 prompt: Curious German Shepherd in a beach baking
-tags:
-  - Curious
 has_pdf: true
 slug: curious-dog-coloring-page-7534
 audience: Kids

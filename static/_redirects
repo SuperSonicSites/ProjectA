@@ -8,3 +8,16 @@
 /collections/butterflies/ /animals/butterflies/ 301
 /collections/horses/ /animals/horses/ 301
 /collections/sharks/ /animals/sharks/ 301
+
+# Redirect deprecated tag taxonomy to animals section (Phase 0: Non-breaking deprecation)
+/tags /animals/ 301
+/tags/ /animals/ 301
+/tags/* /animals/ 301
+
+# Redirect tag Markdown endpoints to animals Markdown index
+/tags/index.md /animals/index.md 301
+/tags/*/index.md /animals/index.md 301
+
+# Deprecated: Explicitly 410 old tag RSS feeds (no longer supported)
+/tags/index.xml 410
+/tags/*/index.xml 410

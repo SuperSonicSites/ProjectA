@@ -24,8 +24,6 @@ prompt: >-
   A cute Beagle puppy rests on a towel at the beach under a striped umbrella. A
   beach ball, sand bucket, and shovel are nearby, with palm trees and ocean
   waves in the background.
-tags:
-  - Kawaii
 pinterest_title: Beagle Beach Umbrella Kawaii Coloring Page
 slug: kawaii-dogs-coloring-pages-6404
 audience: Kids

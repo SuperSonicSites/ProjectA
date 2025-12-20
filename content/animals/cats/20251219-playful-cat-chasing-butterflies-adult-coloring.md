@@ -25,8 +25,6 @@ prompt: >-
   A playful cat leaps from an ornate window sill towards four butterflies. The
   window is framed by swirling floral patterns, with a crescent moon and star
   carved into the sill.
-tags:
-  - Magical Realism
 slug: playful-cat-chasing-butterflies-adult-coloring
 pinterest_title: Playful Cat Chasing Butterflies Window Sill Magical Realism Coloring Page
 ---

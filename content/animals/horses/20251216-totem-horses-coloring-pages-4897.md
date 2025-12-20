@@ -20,8 +20,6 @@ image_url: >-
 download_url: 'https://img.paperpause.app/horses/totem-horses-coloring-pages-4897.pdf'
 r2_original: 'https://img.paperpause.app/horses/totem-horses-coloring-pages-4897.png'
 prompt: Adventurous Dutch Warmblood in a desert Walk
-tags:
-  - Totem
 has_pdf: true
 slug: totem-horses-coloring-pages-4897
 audience: Adults

@@ -20,9 +20,6 @@ image_url: >-
 download_url: 'https://img.paperpause.app/horses/elegant-horse-coloring-page-7834.pdf'
 r2_original: 'https://img.paperpause.app/horses/elegant-horse-coloring-page-7834.png'
 prompt: Elegant Morgan in a steppes Grazing
-tags:
-  - Elegant
-  - Bold Line Pop Art
 has_pdf: true
 slug: elegant-horse-coloring-page-7834
 audience: Kids

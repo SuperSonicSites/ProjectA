@@ -24,9 +24,6 @@
 {{- with .Params.categories }}
 - **Categories:** {{ delimit . ", " }}
 {{- end }}
-{{- with .Params.tags }}
-- **Keywords (tags):** {{ delimit . ", " }}
-{{- end }}
 - **Style:** {{ .Params.style | default "Not specified" }}
 - **Medium:** {{ .Params.medium | default "Not specified" }}
 - **Audience:** {{ .Params.audience | default "Not specified" }}

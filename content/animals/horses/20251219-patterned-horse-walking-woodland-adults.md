@@ -26,8 +26,6 @@ prompt: >-
   An American Quarter Horse, covered in intricate swirling patterns, walks
   gracefully. It is framed by bare woodland trees, which also feature ornate,
   flowing designs.
-tags:
-  - Totem
 slug: patterned-horse-walking-woodland-adults
 pinterest_title: Totem Horse Coloring Page Intricate Patterns Woodland
 ---

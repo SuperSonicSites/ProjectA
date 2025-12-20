@@ -26,8 +26,6 @@ prompt: >-
   A smiling whale shark with a spotted body swims in water with bubbles and
   fish. In the background, a sandy beach has palm trees, an umbrella, and a
   sandcastle.
-tags:
-  - Kawaii
 slug: kawaii-whale-shark-beach-scene-for-kids
 pinterest_title: Kawaii Whale Shark Beach Scene Coloring Page For Kids
 ---

@@ -16,7 +16,6 @@ pinterestTag = "2613274913432"
 
 [taxonomies]
   category = "categories"  # Silo (Animals)
-  tag = "tags"             # Content tags for AI discovery
 
 [related]
   includeNewer = true
@@ -25,19 +24,15 @@ pinterestTag = "2613274913432"
 
   [[related.indices]]
     name = "categories"
-    weight = 80
-  
-  [[related.indices]]
-    name = "tags"
-    weight = 50
-  
+    weight = 100
+
   [[related.indices]]
     name = "difficulty"
     weight = 30
   
   [[related.indices]]
     name = "style"
-    weight = 20
+    weight = 50
 
 [permalinks]
   coloring-pages = "/:sections/:slug/"

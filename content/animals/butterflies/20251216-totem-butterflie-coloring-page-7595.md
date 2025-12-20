@@ -24,8 +24,6 @@ prompt: >-
   A large butterfly with wings spread wide, showcasing intricate patterns of
   spirals, dots, and small flowers. It hovers above a dense bed of varied
   wildflowers and lush leaves.
-tags:
-  - Totem
 has_pdf: true
 pinterest_title: Butterfly Totem Pattern Flowers Coloring Page
 slug: totem-butterflie-coloring-page-7595

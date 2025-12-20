@@ -27,8 +27,6 @@ prompt: >-
   A butterfly with two distinct dots on its forewings rests on a multi-petaled
   flower, framed by a dense arrangement of daisies, curling vines, and small
   mushrooms.
-tags:
-  - Cottagecore
 has_pdf: true
 pinterest_title: Butterfly Flowers Mushrooms Cottagecore Coloring Page
 slug: cottagecore-butterflies-coloring-pages-7744

@@ -23,8 +23,6 @@ r2_original: 'https://img.paperpause.app/cats/kawaii-cats-coloring-pages-4894.pn
 prompt: >-
   A tabby cat sits on a stool reading a book. It is in a bakery with shelves of
   bread and pastries, cakes, and a cash register.
-tags:
-  - Kawaii
 pinterest_title: Kawaii Tabby Cat Bakery Scene Coloring Page
 slug: kawaii-cats-coloring-pages-4894
 audience: Kids

@@ -23,8 +23,6 @@ r2_original: 'https://img.paperpause.app/cats/kawaii-cats-coloring-pages-2076.pn
 prompt: >-
   A cat in a chef's hat plays chess on a board inside a bakery. The display case
   behind it is filled with pastries, bread, and cupcakes.
-tags:
-  - Kawaii
 has_pdf: true
 pinterest_title: Kawaii Cat Playing Chess Bakery Coloring Page
 slug: kawaii-cats-coloring-pages-2076

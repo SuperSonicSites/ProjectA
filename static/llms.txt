@@ -21,7 +21,6 @@ These URLs serve clean, structured Markdown representations of our content, opti
 
 ### Taxonomies
 
-- https://paperpause.app/tags/index.md — All content tags
 - https://paperpause.app/categories/index.md — All categories
 
 ## XML Sitemaps (for search engines)
@@ -34,7 +33,7 @@ These URLs serve clean, structured Markdown representations of our content, opti
 Each Markdown endpoint contains:
 
 1. **Page/Section Header** — Title and description
-2. **Metadata Block** — Structured fields: canonical HTML URL, style, audience, tags, publication date
+2. **Metadata Block** — Structured fields: canonical HTML URL, style, audience, publication date
 3. **Asset Links** — Downloadable PDF and source image URLs
 4. **Image Embedding** — Markdown image tag pointing to the coloring page
 5. **Indexed Content** — For collection pages, lists of child items with links to their own Markdown endpoints

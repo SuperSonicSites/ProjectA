@@ -21,8 +21,6 @@ image_url: >-
 download_url: 'https://img.paperpause.app/dogs/sleepy-dog-coloring-page-3863.pdf'
 r2_original: 'https://img.paperpause.app/dogs/sleepy-dog-coloring-page-3863.png'
 prompt: Sleepy Pug in a beach napping
-tags:
-  - Sleepy
 has_pdf: true
 slug: sleepy-dog-coloring-page-3863
 audience: Kids

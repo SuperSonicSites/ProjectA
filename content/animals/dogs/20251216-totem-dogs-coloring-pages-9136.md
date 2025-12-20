@@ -20,8 +20,6 @@ image_url: >-
 download_url: 'https://img.paperpause.app/dogs/totem-dogs-coloring-pages-9136.pdf'
 r2_original: 'https://img.paperpause.app/dogs/totem-dogs-coloring-pages-9136.png'
 prompt: Sleepy Golden Retriever in a beach painting
-tags:
-  - Totem
 has_pdf: true
 slug: totem-dogs-coloring-pages-9136
 audience: Adults

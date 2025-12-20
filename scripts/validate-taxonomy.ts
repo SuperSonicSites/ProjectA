@@ -70,6 +70,16 @@ async function validateTaxonomy(): Promise<ValidationResult> {
 
       let hasErrors = false;
 
+      // Global policy: tags must never exist in content frontmatter
+      if (frontmatter.tags) {
+        result.errors.push({
+          file,
+          type: 'deprecated_tags_present',
+          message: 'Deprecated field "tags" is present in frontmatter (must be removed)'
+        });
+        hasErrors = true;
+      }
+
       // Check if file has categories
       if (!frontmatter.categories || frontmatter.categories.length === 0) {
         result.errors.push({

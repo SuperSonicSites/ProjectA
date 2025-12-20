@@ -25,8 +25,6 @@ prompt: >-
   A West Highland White Terrier stands in a garden surrounded by intricate
   swirling vines, fern fronds, and blooming morning glory flowers. Several
   bubbles float in the air around it.
-tags:
-  - Magical Realism
 slug: west-highland-white-terrier-morning-glory-flowers
 pinterest_title: West Highland White Terrier Morning Glory Vines Coloring Page
 ---

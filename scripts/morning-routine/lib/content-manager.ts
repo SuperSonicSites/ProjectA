@@ -82,6 +82,12 @@ export function updateContentFrontmatter(
     // Merge new frontmatter with existing
     const updated = { ...parsed.data, ...frontmatter };
 
+    // Global policy: tags must never exist in content frontmatter going forward
+    // (prevents accidental reintroduction via automation like SEO review scripts)
+    if (Object.prototype.hasOwnProperty.call(updated, 'tags')) {
+      delete (updated as any).tags;
+    }
+
     const newContent = matter.stringify(parsed.content, updated);
     fs.writeFileSync(filepath, newContent, 'utf8');
 

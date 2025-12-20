@@ -22,8 +22,6 @@ image_url: >-
 download_url: 'https://img.paperpause.app/dogs/grumpy-dog-coloring-page-0623.pdf'
 r2_original: 'https://img.paperpause.app/dogs/grumpy-dog-coloring-page-0623.png'
 prompt: Grumpy Beagle in a appartment painting
-tags:
-  - Grumpy
 has_pdf: true
 slug: grumpy-dog-coloring-page-0623
 audience: Kids

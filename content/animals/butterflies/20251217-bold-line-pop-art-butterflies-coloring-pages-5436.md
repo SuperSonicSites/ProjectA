@@ -26,8 +26,6 @@ prompt: >-
   A Zebra Longwing butterfly with detailed wing venation is centered, surrounded
   by stylized clouds. Stars and crescent moons are scattered throughout the
   background.
-tags:
-  - Bold Line Pop Art
 pinterest_title: Zebra Longwing Butterfly Clouds Stars Moons Bold Line Pop Art Coloring Page
 slug: bold-line-pop-art-butterflies-coloring-pages-5436
 audience: Kids

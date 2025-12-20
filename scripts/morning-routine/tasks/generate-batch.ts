@@ -246,8 +246,6 @@ image_url: "${uploadResult.imageUrl}"
 download_url: "${uploadResult.downloadUrl}"
 r2_original: "${uploadResult.r2Url}"
 prompt: "${variantPrompt}"
-tags:
-  - ${style.name}
 ---
 
 A beautiful ${collection} coloring page in ${style.name} style.

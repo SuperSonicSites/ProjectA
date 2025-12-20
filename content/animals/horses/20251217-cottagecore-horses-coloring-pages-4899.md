@@ -25,8 +25,6 @@ prompt: >-
   A grumpy miniature horse wearing a knitted blanket stands in a wooden stable
   entrance. It is surrounded by winding vines, flowers, mushrooms, and a crate
   of fresh produce.
-tags:
-  - Cottagecore
 pinterest_title: Grumpy Miniature Horse Cottagecore Stable Flowers Coloring Page
 slug: cottagecore-horses-coloring-pages-4899
 audience: Adults

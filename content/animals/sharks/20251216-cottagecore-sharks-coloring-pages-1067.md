@@ -25,8 +25,6 @@ prompt: >-
   A smiling shark with a bandana and sunglasses holds a detailed treasure map,
   surrounded by five happy jellyfish, lush underwater plants, mushrooms, and two
   treasure chests.
-tags:
-  - Cottagecore
 pinterest_title: Shark With Treasure Map Jellyfish Cottagecore Coloring Page
 slug: cottagecore-sharks-coloring-pages-1067
 audience: Adults
