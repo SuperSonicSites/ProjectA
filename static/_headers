@@ -1,0 +1,14 @@
+# Cache fingerprinted CSS for 1 year (immutable)
+/css/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Cache non-fingerprinted assets conservatively to avoid staleness
+/fonts/*
+  Cache-Control: public, max-age=604800
+/images/*
+  Cache-Control: public, max-age=604800
+
+# Default cache for HTML pages (ensure fresh content)
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+

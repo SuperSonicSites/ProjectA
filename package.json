@@ -4,7 +4,7 @@
   "description": "Visual Sanctuary Static Site",
   "scripts": {
     "dev": "npm run build:css && hugo server --disableFastRender",
-    "build:css": "tailwindcss -i ./themes/visual-sanctuary-theme/assets/css/main.css -o ./static/css/main.css --minify",
+    "build:css": "tailwindcss -i ./themes/visual-sanctuary-theme/assets/css/main.css -o ./assets/css/main.css --minify",
     "build:hugo": "hugo --minify --gc",
     "build:search": "npx pagefind --site public",
     "build": "npm run clean && npm run build:css && npm run build:hugo && npm run build:search",

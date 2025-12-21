@@ -67,8 +67,9 @@
 <!-- Schema.org JSON-LD -->
 {{ partial "seo/schema.html" . }}
 
-<!-- Tailwind (Static Output) -->
-<link rel="stylesheet" href="/css/main.css">
+<!-- Tailwind (Fingerprinted via Hugo Asset Pipeline) -->
+{{ $styles := resources.Get "css/main.css" | fingerprint }}
+<link rel="stylesheet" href="{{ $styles.RelPermalink }}" integrity="{{ $styles.Data.Integrity }}">
 
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
