@@ -25,8 +25,6 @@ r2_original: 'https://img.paperpause.app/butterflies/temp-1766225155552.png'
 prompt: >-
   A Painted Lady butterfly with patterned wings rests on a large daisy flower.
   Smaller flowers and smiling blades of grass surround it in a garden scene.
-tags:
-  - Kawaii
 slug: painted-lady-butterfly-in-garden-for-kids
 pinterest_title: Painted Lady Butterfly Kawaii Flower Garden Coloring Page
 ---

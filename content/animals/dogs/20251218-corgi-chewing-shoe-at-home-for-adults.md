@@ -26,8 +26,6 @@ prompt: >-
   A Corgi dog lies on a patterned rug, holding a sneaker in its mouth,
   surrounded by an armchair, throw blanket, cushion, and two potted plants.
   Everything is highly detailed.
-tags:
-  - Totem
 slug: corgi-chewing-shoe-at-home-for-adults
 pinterest_title: Corgi Chewing Shoe Totem Style Adult Coloring Page
 ---

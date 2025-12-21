@@ -25,8 +25,6 @@ prompt: >-
   A Hammerhead shark with intricate patterns covering its body leaps gracefully
   out of swirling ocean waves. Delicate coral formations are visible beneath the
   water.
-tags:
-  - Totem
 slug: hammerhead-shark-leaping-waves-adults
 pinterest_title: Hammerhead Shark Totem Style Coloring Page for Adults
 ---

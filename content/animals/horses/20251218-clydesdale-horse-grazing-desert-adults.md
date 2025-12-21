@@ -25,8 +25,6 @@ prompt: >-
   A Clydesdale horse with a long flowing mane and feathered hooves grazes in a
   desert landscape. It is surrounded by saguaro and prickly pear cacti, rocks,
   and small desert flowers.
-tags:
-  - Cottagecore
 slug: clydesdale-horse-grazing-desert-adults
 pinterest_title: Clydesdale Horse Grazing Desert Cacti Cottagecore Coloring Page
 ---

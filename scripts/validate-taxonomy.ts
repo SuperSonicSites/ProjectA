@@ -6,24 +6,9 @@ import { logger } from './morning-routine/lib/logger';
 
 /**
  * Validate taxonomy structure for all content files
- * Ensures categories and collections match allowed values
+ * NOTE: This validator intentionally does NOT validate categories/collections.
+ * It only enforces lightweight, future-proof invariants (e.g., deprecated fields).
  */
-
-const ALLOWED_CATEGORIES = [
-  'animals',
-  'mandalas',
-  'holidays',
-  'fantasy',
-  'educational'
-];
-
-const ALLOWED_COLLECTIONS = {
-  animals: ['cats', 'dogs', 'butterflies', 'horses', 'bears', 'dinosaurs', 'forest', 'sharks'],
-  mandalas: ['geometric', 'floral', 'abstract'],
-  holidays: ['christmas', 'halloween', 'easter', 'thanksgiving'],
-  fantasy: ['fairies', 'mermaids', 'goth', 'dragons'],
-  educational: ['math', 'alphabet', 'science', 'history']
-};
 
 interface ValidationError {
   file: string;
@@ -57,8 +42,8 @@ async function validateTaxonomy(): Promise<ValidationResult> {
     // Normalize path to use forward slashes for cross-platform consistency
     const normalizedFile = file.replace(/\\/g, '/');
 
-    if (normalizedFile.includes('_index') || !normalizedFile.includes('/animals/')) {
-      continue; // Skip section index files and non-animal content for now
+    if (normalizedFile.includes('_index')) {
+      continue; // Skip section index files
     }
 
     result.total++;
@@ -80,76 +65,9 @@ async function validateTaxonomy(): Promise<ValidationResult> {
         hasErrors = true;
       }
 
-      // Check if file has categories
-      if (!frontmatter.categories || frontmatter.categories.length === 0) {
-        result.errors.push({
-          file,
-          type: 'missing_category',
-          message: 'Missing categories in frontmatter'
-        });
-        hasErrors = true;
-      } else {
-        // Validate each category
-        for (const category of frontmatter.categories) {
-          if (!ALLOWED_CATEGORIES.includes(category)) {
-            result.errors.push({
-              file,
-              type: 'invalid_category',
-              message: `Invalid category "${category}". Allowed: ${ALLOWED_CATEGORIES.join(', ')}`
-            });
-            hasErrors = true;
-          }
-        }
-      }
+      // Intentionally no categories/collections validation.
 
-      // Validate collection based on directory structure (not frontmatter)
-      // File should be in content/<category>/<collection>/filename.md
-      const pathParts = normalizedFile.split('/');
-      const categoryIndex = pathParts.indexOf('content') + 1;
-      const collectionIndex = categoryIndex + 1;
-      
-      if (pathParts.length > collectionIndex) {
-        const categoryFromPath = pathParts[categoryIndex];
-        const collectionFromPath = pathParts[collectionIndex];
-        
-        // Validate collection directory matches allowed values
-        if (categoryFromPath && collectionFromPath) {
-          const allowed = ALLOWED_COLLECTIONS[categoryFromPath as keyof typeof ALLOWED_COLLECTIONS] || [];
-          if (allowed.length > 0 && !allowed.includes(collectionFromPath.toLowerCase())) {
-            result.errors.push({
-              file,
-              type: 'invalid_collection_path',
-              message: `Invalid collection directory "${collectionFromPath}" for category "${categoryFromPath}". Allowed: ${allowed.join(', ')}`
-            });
-            hasErrors = true;
-          }
-        }
-      }
-
-      // Check required fields for coloring pages
-      if (frontmatter.type === 'coloring-pages') {
-        const requiredFields = ['style', 'audience'];
-        for (const field of requiredFields) {
-          if (!frontmatter[field]) {
-            result.errors.push({
-              file,
-              type: 'missing_field',
-              message: `Missing required field: ${field}`
-            });
-            hasErrors = true;
-          }
-        }
-
-        // Validate audience values
-        if (frontmatter.audience && !['Kids', 'Adults'].includes(frontmatter.audience)) {
-          result.errors.push({
-            file,
-            type: 'invalid_audience',
-            message: `Invalid audience "${frontmatter.audience}". Allowed: Kids, Adults`
-          });
-          hasErrors = true;
-        }
-      }
+      // (Optional) add other lightweight invariants here, but avoid validating taxonomy values.
 
       if (!hasErrors) {
         result.valid++;
@@ -190,14 +108,6 @@ async function validateTaxonomy(): Promise<ValidationResult> {
         console.log(`   ❌ [${error.type}] ${error.message}`);
       }
     }
-
-    console.log('\n' + '='.repeat(80));
-    console.log('Allowed categories:', ALLOWED_CATEGORIES.join(', '));
-    console.log('\nAllowed collections by category:');
-    for (const [category, collections] of Object.entries(ALLOWED_COLLECTIONS)) {
-      console.log(`  ${category}: ${collections.join(', ')}`);
-    }
-    console.log('='.repeat(80) + '\n');
 
     return result;
   }

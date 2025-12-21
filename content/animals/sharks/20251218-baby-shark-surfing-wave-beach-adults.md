@@ -25,8 +25,6 @@ prompt: >-
   A baby shark sits in a meditative pose on a surfboard, riding a large
   decorative wave. In the background are palm trees, a sandy beach, and rocky
   formations.
-tags:
-  - Magical Realism
 slug: baby-shark-surfing-wave-beach-adults
 pinterest_title: Baby Shark Surfing Wave Beach Magical Realism Coloring Page
 ---

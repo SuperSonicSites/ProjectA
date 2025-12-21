@@ -25,8 +25,6 @@ prompt: >-
   A cute Morgan horse with large eyes and a flowing mane trots in front of a
   stable. Stacked hay bales and a bucket are on the left, with another hay bale
   on the right.
-tags:
-  - Kawaii
 slug: morgan-horse-in-stable-for-kids
 pinterest_title: Kawaii Morgan Horse Stable Hay Bales Kids Coloring Page
 ---

@@ -25,8 +25,6 @@ prompt: >-
   A Great Spangled Fritillary butterfly with detailed wing patterns rests gently
   on a tall spiky flower. Large leaves are visible at the base, and abstract
   shapes fill the background.
-tags:
-  - Bold Line Pop Art
 slug: great-spangled-fritillary-butterfly-flower-kids
 pinterest_title: Great Spangled Fritillary Butterfly Bold Line Pop Art Coloring Page
 ---

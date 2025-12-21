@@ -19,14 +19,16 @@ const CONTENT_DIR = path.resolve(__dirname, '../../../content');
  * Surgically remove tags from frontmatter without touching other fields
  */
 function removeTagsFromFrontmatter(content: string): { updated: boolean; content: string } {
-  // Match the frontmatter block (---\n...---\n)
-  const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---\n/);
+  // Preserve original newline style for minimal diffs
+  const NL = content.includes('\r\n') ? '\r\n' : '\n';
+
+  // Match the top frontmatter block (supports LF and CRLF)
+  const frontmatterMatch = content.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n/);
   if (!frontmatterMatch) {
     return { updated: false, content };
   }
 
   const frontmatter = frontmatterMatch[1];
-  const beforeFrontmatter = '';
   const afterFrontmatter = content.substring(frontmatterMatch[0].length);
 
   // Check if tags field exists
@@ -34,28 +36,52 @@ function removeTagsFromFrontmatter(content: string): { updated: boolean; content
     return { updated: false, content };
   }
 
-  // Remove tags field (handles both single-line and multi-line)
-  // Pattern 1: tags with single-line array (tags: [...])
-  const singleLinePattern = /^tags:\s*\[.*?\]\s*$/m;
-  let updated = frontmatter.replace(singleLinePattern, '');
+  // Line-based removal to avoid YAML re-serialization and to handle CRLF/LF consistently.
+  const lines = frontmatter.split(/\r?\n/);
+  const out: string[] = [];
+  let removed = false;
+  let skippingTagsBlock = false;
 
-  // Pattern 2: tags with multi-line list (tags:\n  - value\n  - value)
-  const multiLinePattern = /^tags:\s*\n(?:  - [^\n]*\n)*/m;
-  if (updated === frontmatter) {
-    updated = frontmatter.replace(multiLinePattern, '');
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+
+    // Start of tags field (either `tags:` or `tags: [...]`)
+    if (!skippingTagsBlock && /^tags:\s*(?:\[[^\]]*\])?\s*$/.test(line)) {
+      removed = true;
+      skippingTagsBlock = true;
+      continue;
+    }
+
+    if (skippingTagsBlock) {
+      // YAML list items are typically indented. Skip until we hit the next top-level key.
+      // - list items like: "  - Foo"
+      // - allow blank lines inside the skipped block
+      if (line.trim() === '' || /^\s+-\s+/.test(line)) {
+        continue;
+      }
+      // End of tags block: next non-list, non-empty line
+      skippingTagsBlock = false;
+      // fallthrough to keep this line
+    }
+
+    out.push(line);
   }
 
-  // If nothing changed, tags might be in a different format; try more aggressive match
-  if (updated === frontmatter) {
-    const aggressivePattern = /^tags:[\s\S]*?(?=\n[a-z_]|\n---|\Z)/m;
-    updated = frontmatter.replace(aggressivePattern, '');
+  if (!removed) {
+    return { updated: false, content };
   }
 
-  // Clean up any double newlines that may have resulted
-  updated = updated.replace(/\n\n+/g, '\n');
+  // Minor cleanup: if we created a double blank line around removal, collapse just one run.
+  const cleaned: string[] = [];
+  for (let i = 0; i < out.length; i++) {
+    const prev = cleaned.length > 0 ? cleaned[cleaned.length - 1] : null;
+    if (prev !== null && prev.trim() === '' && out[i].trim() === '') continue;
+    cleaned.push(out[i]);
+  }
 
-  const newContent = `---\n${updated}\n---\n${afterFrontmatter}`;
-  return { updated: updated !== frontmatter, content: newContent };
+  const updatedFrontmatter = cleaned.join(NL);
+  const newContent = `---${NL}${updatedFrontmatter}${NL}---${NL}${afterFrontmatter}`;
+  return { updated: true, content: newContent };
 }
 
 async function cleanupTags() {

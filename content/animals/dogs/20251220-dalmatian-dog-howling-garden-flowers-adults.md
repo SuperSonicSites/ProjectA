@@ -25,8 +25,6 @@ prompt: >-
   A Dalmatian dog stands, head tilted back and mouth open in a howl. Intricate
   floral patterns cover its body, surrounded by a dense garden of various
   blooming flowers.
-tags:
-  - Totem
 slug: dalmatian-dog-howling-garden-flowers-adults
 pinterest_title: Dalmatian Dog Howling Totem Style Garden Flowers Coloring Page
 ---

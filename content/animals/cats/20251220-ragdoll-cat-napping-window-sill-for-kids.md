@@ -25,8 +25,6 @@ prompt: >-
   A Ragdoll cat is curled up and napping peacefully on two pillows, resting on a
   window sill. Outside the window, a crescent moon, several clouds, and
   scattered stars are visible.
-tags:
-  - Bold Line Pop Art
 slug: ragdoll-cat-napping-window-sill-for-kids
 pinterest_title: Ragdoll Cat Window Sill Moon Stars Coloring Page
 ---

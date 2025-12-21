@@ -26,8 +26,6 @@ prompt: >-
   A happy Tuxedo Cat sits on a stack of books, reading a vintage book in a
   cluttered art studio. Easels, paint tubes, brushes, and classical busts
   surround the cat.
-tags:
-  - Magical Realism
 slug: tuxedo-cat-reading-book-art-studio-for-adults
 pinterest_title: Tuxedo Cat Reading Book Art Studio Magical Realism Coloring Page
 ---
