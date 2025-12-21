@@ -4,7 +4,7 @@ import { generateImage } from '../lib/gemini';
 import { uploadImage } from '../lib/storage';
 import { RateLimiter } from '../lib/rate-limiter';
 import { logger } from '../lib/logger';
-import { loadPrompt, getRandomVariant, buildPromptWithStyle, StyleSelectionOptions } from '../lib/prompt-manager';
+import { loadPrompt, getVariantPrompt, buildPromptWithStyle, StyleSelectionOptions } from '../lib/prompt-manager';
 import { readIndexFile } from '../lib/hugo-manager';
 import { ENV } from '../config/env';
 import { logActiveFlags } from '../config/flags';
@@ -184,7 +184,12 @@ export const generateBatch = async (
     await limiter.throttle(async () => {
       const startTime = Date.now();
       const timestamp = Date.now();
-      const variantPrompt = getRandomVariant(category, collection);
+      // Variant selection: deterministic when styleMode is rotate (seeded by date + collection + slot)
+      const variantSeed = `${styleRotationKey}:${category}/${collection}:slot_${i + 1}`;
+      const variantPrompt = getVariantPrompt(category, collection, {
+        mode: styleMode === 'rotate' ? 'rotate' : 'random',
+        seedKey: variantSeed
+      });
 
       // Build prompt with style (mode and options controlled by env vars or defaults)
       const { fullPrompt, style, negative_prompt } = buildPromptWithStyle(

@@ -41,9 +41,3 @@ config/prompts/
 
 # Autonomy runtime manifests / logs (do not commit)
 scripts/morning-routine/.runs/
-
-# Mission Control: keep config/docs, ignore any future runtime outputs
-mission-control/logs/*
-!mission-control/logs/README.md
-mission-control/state/
-mission-control/tmp/

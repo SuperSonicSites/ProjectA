@@ -19,6 +19,7 @@ An **asset** is an **Approved PNG** that has **passed QA** and is ready to be tu
 
 ## Scope (what’s included)
 - **Foreman (Scheduler)**: schedule-driven selection of active collections, plus maintenance throttling at cap.
+- **Model Standard**: All decision agents (0, 1, 3, 4) use **gemini-3-flash-preview** (Thinking: **MEDIUM**).
 - **Designer (Auto-Genesis)**: create missing collection scaffolding (prompt config + `_index.md`) for new categories/collections (e.g., `fantasy/*`).
 - **Factory (Generation)**: generate candidate PNGs and produce a manifest for downstream steps.
 - **Critic (QA)**: **1-strike fail-fast**; first failure rejects+logs and halts that collection for the run.

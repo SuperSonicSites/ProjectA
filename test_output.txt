@@ -1,0 +1,2 @@
+matrix=["animals/cats","animals/dogs","animals/horses","animals/butterflies","animals/sharks"]
+designer_matrix=["animals/cats","animals/dogs","animals/horses","animals/butterflies","animals/sharks","fantasy/dragons","fantasy/elves","fantasy/princesses","fantasy/knights","fantasy/fairies"]

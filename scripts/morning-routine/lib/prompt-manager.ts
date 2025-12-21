@@ -21,6 +21,15 @@ export interface PromptConfig {
   };
 }
 
+export interface VariantSelectionOptions {
+  mode?: 'random' | 'rotate';
+  /**
+   * A stable seed key used to pick deterministic indices when mode === 'rotate'.
+   * Recommended: YYYY-MM-DD + category/collection + slot index.
+   */
+  seedKey?: string;
+}
+
 /**
  * Load prompt config for a collection
  */
@@ -86,6 +95,25 @@ export function savePrompt(
  * Format: A {tone} {type}, {action}, in {setting}. {detail}
  */
 export function getRandomVariant(category: string, collection: string): string {
+  return getVariantPrompt(category, collection, { mode: 'random' });
+}
+
+function pickBySeed(list: string[], seed: string): string {
+  if (!list || list.length === 0) return '';
+  const idx = simpleStringHash(seed) % list.length;
+  return list[idx];
+}
+
+/**
+ * Generate a variant prompt from prompt attributes.
+ * - random: uses Math.random (current baseline behavior)
+ * - rotate: deterministic selection based on seedKey
+ */
+export function getVariantPrompt(
+  category: string,
+  collection: string,
+  options?: VariantSelectionOptions
+): string {
   const prompt = loadPrompt(category, collection);
 
   if (!prompt) {
@@ -94,17 +122,38 @@ export function getRandomVariant(category: string, collection: string): string {
   }
 
   const { tones, types, actions, settings, details } = prompt.attributes;
+  const mode = options?.mode ?? 'random';
 
-  const randomTone = tones.length > 0 ? tones[Math.floor(Math.random() * tones.length)] : '';
-  const randomType = types.length > 0 ? types[Math.floor(Math.random() * types.length)] : collection;
-  const randomAction = actions.length > 0 ? actions[Math.floor(Math.random() * actions.length)] : '';
-  const randomSetting = settings.length > 0 ? settings[Math.floor(Math.random() * settings.length)] : '';
-  const randomDetail = (details && details.length > 0) ? details[Math.floor(Math.random() * details.length)] : '';
+  let tone = '';
+  let type = collection;
+  let action = '';
+  let setting = '';
+  let detail = '';
 
-  let variant = `A ${randomTone} ${randomType}`.replace(/\s+/g, ' ').trim();
-  if (randomAction) variant += `, ${randomAction}`;
-  if (randomSetting) variant += `, in ${randomSetting}`;
-  if (randomDetail) variant += `. ${randomDetail}`;
+  if (mode === 'rotate') {
+    const seedKey = options?.seedKey;
+    if (!seedKey) {
+      logger.warn(`Variant rotate mode requested but no seedKey provided for ${category}/${collection}; falling back to random.`);
+      return getVariantPrompt(category, collection, { mode: 'random' });
+    }
+
+    tone = pickBySeed(tones, `${seedKey}|tone`);
+    type = pickBySeed(types, `${seedKey}|type`) || collection;
+    action = pickBySeed(actions, `${seedKey}|action`);
+    setting = pickBySeed(settings, `${seedKey}|setting`);
+    detail = pickBySeed(details, `${seedKey}|detail`);
+  } else {
+    tone = tones.length > 0 ? tones[Math.floor(Math.random() * tones.length)] : '';
+    type = types.length > 0 ? types[Math.floor(Math.random() * types.length)] : collection;
+    action = actions.length > 0 ? actions[Math.floor(Math.random() * actions.length)] : '';
+    setting = settings.length > 0 ? settings[Math.floor(Math.random() * settings.length)] : '';
+    detail = (details && details.length > 0) ? details[Math.floor(Math.random() * details.length)] : '';
+  }
+
+  let variant = `A ${tone} ${type}`.replace(/\s+/g, ' ').trim();
+  if (action) variant += `, ${action}`;
+  if (setting) variant += `, in ${setting}`;
+  if (detail) variant += `. ${detail}`;
 
   return variant.trim();
 }

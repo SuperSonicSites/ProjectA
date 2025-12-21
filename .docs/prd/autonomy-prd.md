@@ -6,7 +6,8 @@
 
 **Status:** Draft (review-ready)
 
-**Core stack:** Hugo, Cloudflare Pages, Cloudflare R2, Cloudflare Images, GitHub Actions, Gemini (image + vision), Make.com
+**Core stack:** Hugo, Cloudflare Pages, Cloudflare R2, Cloudflare Images, GitHub Actions, gemini-3-flash-preview (thinking + vision), gemini-3-pro-image-preview (image), Make.com
+**Thinking model rules:** All reasoning/decision agents (0, 1, 3, 4) MUST use `gemini-3-flash-preview` with **Thinking Level: MEDIUM**.
 
 **Companion docs:**
 - Issues & Questions Log: `.docs/prd/autonomy-prd.issues.md`
@@ -109,6 +110,7 @@ All issue comment formats must be machine-parseable and versioned (see `.docs/pr
 - **Invariants**: non-destructive; supports dry-run.
 - **Disable switches**: `ENABLE_DESIGNER`, `DESIGNER_DRY_RUN`
 - **Acceptance**: a newly scheduled collection no longer fails generation due to missing prompts or `_index.md`.
+- **Model**: `gemini-3-flash-preview` (Thinking: MEDIUM).
 
 ### Agent 1: Architect (Immunization)
 - **Role**: reduce failure rates by adjusting prompt configs based on rejection patterns.
@@ -118,13 +120,15 @@ All issue comment formats must be machine-parseable and versioned (see `.docs/pr
 - **Invariants**:
   - **Scope-limited mutation**: Agent 1 may only modify `negative_prompt` (or a dedicated `immunization_terms` list that is merged into `negative_prompt`). It must never change positive prompt text, templates, or subject/style lists.
   - **Capped edits**: bounded number of additions per collection per week; deduped terms; cooldown to avoid thrashing.
-  - **Hard prompt budget**: total model input prompt (positive + negative + separators) must be **≤ 500 characters**.
+  - **Hard prompt budget (Agent 1 edits only)**: when editing `negative_prompt` via immunization, the **total Agent 1 input prompt** (Issue #4 context + reasoning + proposed edits) must be **≤ 500 characters** to stay within self-healing guardrails. This is a safety cap on the **feedback loop growth**, not on the full generation prompt.
     - If the cap would be exceeded, prune `immunization_terms` first (oldest-first / lowest-impact-first) until compliant.
     - If still > 500, abort the immunization change and log a warning (do not truncate positive prompt).
+    - **Note**: The generation system's full prompt (base + styles + scene) may be much larger; the 500-char cap applies only to Agent 1's self-healing loop inputs.
   - **Reversible**: every change is git-revertable and logged.
   - **Deterministic parsing + schema versioning**: Issue #4 parsing must be stable and versioned.
 - **Disable switches**: `ENABLE_IMMUNIZATION`, `IMMUNIZATION_MAX_EDITS_PER_RUN`
 - **Acceptance**: targeted rejection reasons drop over N runs without introducing new dominant failures.
+- **Model**: `gemini-3-flash-preview` (Thinking: MEDIUM).
 - **Note**: Issue #2 (Primary SEO Monitoring) is not used as an input; it remains an external reporting process.
 
 ### Agent 2: Factory (Generation)
@@ -145,9 +149,12 @@ All issue comment formats must be machine-parseable and versioned (see `.docs/pr
     - log the failure reason to the Trash Can issue (Issue #4)
     - halt further generation/processing for that collection for the remainder of the run
   - Other collections in the run continue normally.
+- **Vision Requirements**:
+  - Image processing MUST use `MEDIA_RESOLUTION_ULTRA_HIGH`.
 - **Outputs**: survivors + rejected items (routed + logged).
 - **Disable switches**: `ENABLE_QA`, `QA_MODE`
 - **Acceptance**: failures are rejected and logged to Issue #4; the collection halts after the first failure; survivors proceed end-to-end.
+- **Model**: `gemini-3-flash-preview` (Thinking: MEDIUM).
 
 ### Agent 4: SEO Copywriter / Finisher (Packaging)
 - **Repo reality today**: `.agents/seo-copywriter/` + `scripts/morning-routine/tasks/seo-review-batch.ts` update SEO fields and rename markdown deterministically.
@@ -155,6 +162,7 @@ All issue comment formats must be machine-parseable and versioned (see `.docs/pr
 - **Invariants**: bounded frontmatter edits; never reintroduces deprecated fields; best-effort failure does not block the run.
 - **Disable switches**: `ENABLE_FINISHING`
 - **Acceptance**: survivor pages have consistent metadata and retain critical URLs (`image_url`, `download_url`, `r2_original`).
+- **Model**: `gemini-3-flash-preview` (Thinking: MEDIUM).
 
 ### Agent 5: Distributor (Syndication)
 - **Role**: Make.com automation: RSS → Pinterest with UTM.

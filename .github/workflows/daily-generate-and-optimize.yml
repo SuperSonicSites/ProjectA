@@ -11,25 +11,87 @@ permissions:
   issues: write    # For posting comments on tracking issue
 
 env:
+  # Autonomy System Feature Flags (Phase A-D rollout control)
+  ENABLE_FOREMAN: '0'
+  ENABLE_DESIGNER: '0'
+  DESIGNER_DRY_RUN: '1'
+  ENABLE_QA: '0'
+  QA_MODE: 'observe'
+  ENABLE_FINISHING: '0'
+  ENABLE_PDF: '0'
+  ENABLE_IMMUNIZATION: '0'
   NODE_VERSION: '20'
-  TRACKING_ISSUE_NUMBER: 1
-  # Autonomy System Feature Flags (Phase 0 Baseline)
-  ENABLE_FOREMAN: 0
-  ENABLE_DESIGNER: 0
-  DESIGNER_DRY_RUN: 1
-  ENABLE_QA: 0
-  QA_MODE: observe
-  ENABLE_FINISHING: 0
-  ENABLE_PDF: 0
-  ENABLE_IMMUNIZATION: 0
 
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.foreman.outputs.matrix }}
+      designer_matrix: ${{ steps.foreman.outputs.designer_matrix }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Create .dev.vars
+        run: |
+          cat << 'EOF' > .dev.vars
+          GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
+          R2_ACCOUNT_ID=${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID=${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY=${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET_NAME=${{ secrets.R2_BUCKET_NAME }}
+          R2_PUBLIC_URL=${{ secrets.R2_PUBLIC_URL }}
+          CF_IMAGES_ACCOUNT_ID=${{ secrets.CF_IMAGES_ACCOUNT_ID }}
+          CF_IMAGES_API_TOKEN=${{ secrets.CF_IMAGES_API_TOKEN }}
+          CF_IMAGES_ACCOUNT_HASH=${{ secrets.CF_IMAGES_ACCOUNT_HASH }}
+          ENABLE_FOREMAN=${{ env.ENABLE_FOREMAN }}
+          ENABLE_DESIGNER=${{ env.ENABLE_DESIGNER }}
+          DESIGNER_DRY_RUN=${{ env.DESIGNER_DRY_RUN }}
+          ENABLE_QA=${{ env.ENABLE_QA }}
+          QA_MODE=${{ env.QA_MODE }}
+          ENABLE_FINISHING=${{ env.ENABLE_FINISHING }}
+          ENABLE_PDF=${{ env.ENABLE_PDF }}
+          ENABLE_IMMUNIZATION=${{ env.ENABLE_IMMUNIZATION }}
+          EOF
+      - name: Run Foreman (Scheduling)
+        id: foreman
+        run: |
+          # The script uses ::set-output which is deprecated but still works for now, 
+          # but let's try to map it to $GITHUB_OUTPUT if possible or keep it consistent.
+          # Our script does console.log("::set-output name=matrix...")
+          npx ts-node scripts/morning-routine/tasks/production-schedule.ts
+      - name: Run Designer (Auto-Genesis)
+        if: env.ENABLE_DESIGNER == '1'
+        run: |
+          npx ts-node scripts/morning-routine/tasks/design-collection.ts '${{ steps.foreman.outputs.designer_matrix }}'
+      - name: Commit Designer changes
+        if: env.ENABLE_DESIGNER == '1' && env.DESIGNER_DRY_RUN == '0'
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          git add content/ scripts/morning-routine/config/prompts/ mission-control/logs/
+          if ! git diff --staged --quiet; then
+            git commit -m "🎨 [Designer] Scaffolded new collections"
+            git push
+          fi
+      - name: Upload Foreman/Designer logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: setup-logs
+          path: mission-control/logs/
   generate:
+    needs: setup
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        collection: [cats, dogs, horses, butterflies, sharks]
+        collection_path: ${{ fromJson(needs.setup.outputs.matrix) }}
     
     steps:
       - name: Set daily style rotation key
@@ -74,24 +136,32 @@ jobs:
           ENABLE_IMMUNIZATION=${{ env.ENABLE_IMMUNIZATION }}
           EOF
 
-      - name: Generate ${{ matrix.collection }} (1 image)
+      - name: Parse collection path
+        id: parse
+        run: |
+          # category/collection -> category collection
+          PATH_VAL="${{ matrix.collection_path }}"
+          echo "category=${PATH_VAL%/*}" >> $GITHUB_OUTPUT
+          echo "collection=${PATH_VAL#*/}" >> $GITHUB_OUTPUT
+
+      - name: Generate ${{ matrix.collection_path }} (1 image)
         id: generate
         env:
           STYLE_MODE: rotate
           STYLE_ROTATION_KEY: ${{ env.DAILY_STYLE_KEY }}
         run: |
-          RUN_ID=$(date +%Y-%m-%dT%H-%M-%SZ)-${{ matrix.collection }}
+          RUN_ID=$(date +%Y-%m-%dT%H-%M-%SZ)-${{ steps.parse.outputs.collection }}
           echo "run_id=$RUN_ID" >> $GITHUB_OUTPUT
-          GENERATION_RUN_ID=$RUN_ID npx ts-node scripts/morning-routine/tasks/generate-batch.ts animals ${{ matrix.collection }} 1
+          GENERATION_RUN_ID=$RUN_ID npx ts-node scripts/morning-routine/tasks/generate-batch.ts ${{ steps.parse.outputs.category }} ${{ steps.parse.outputs.collection }} 1
 
-      - name: Optimize SEO metadata for ${{ matrix.collection }}
+      - name: Optimize SEO metadata for ${{ steps.parse.outputs.collection }}
         id: seo
         run: |
           MANIFEST_FILE="scripts/morning-routine/.runs/${{ steps.generate.outputs.run_id }}.json"
           if [ -f "$MANIFEST_FILE" ]; then
-            npx ts-node scripts/morning-routine/tasks/seo-review-batch.ts animals ${{ matrix.collection }} --manifest "$MANIFEST_FILE"
+            npx ts-node scripts/morning-routine/tasks/seo-review-batch.ts ${{ steps.parse.outputs.category }} ${{ steps.parse.outputs.collection }} --manifest "$MANIFEST_FILE"
           else
-            echo "⚠️  No manifest found, skipping SEO for ${{ matrix.collection }}"
+            echo "⚠️  No manifest found, skipping SEO for ${{ steps.parse.outputs.collection }}"
           fi
         continue-on-error: true
 
@@ -108,11 +178,11 @@ jobs:
 
           # Copy only untracked files created during this job, under this collection
           # Uses -z (null terminator) to handle any filenames safely
-          git ls-files -z --others --exclude-standard -- "content/animals/${{ matrix.collection }}/" \
+          git ls-files -z --others --exclude-standard -- "content/${{ matrix.collection_path }}/" \
             | xargs -0 -r cp --parents -t staging
 
           # Count files for conditional upload
-          COUNT="$(find staging/content/animals/${{ matrix.collection }} -type f 2>/dev/null | wc -l | tr -d ' ')"
+          COUNT="$(find staging/content/${{ matrix.collection_path }} -type f 2>/dev/null | wc -l | tr -d ' ')"
           echo "count=$COUNT" >> "$GITHUB_OUTPUT"
           echo "Staged $COUNT file(s)"
 
@@ -120,7 +190,7 @@ jobs:
         if: steps.stage.outputs.count != '0'
         uses: actions/upload-artifact@v4
         with:
-          name: content-${{ matrix.collection }}
+          name: content-${{ steps.parse.outputs.collection }}
           path: staging/
           retention-days: 1
 
@@ -146,7 +216,7 @@ jobs:
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
-          git add content/animals/
+          git add content/
           
           if git diff --staged --quiet; then
             echo "✓ No changes to commit"
@@ -171,6 +241,11 @@ jobs:
           echo "- **Finishing:** ${{ env.ENABLE_FINISHING }}" >> $GITHUB_STEP_SUMMARY
           echo "- **PDF JIT:** ${{ env.ENABLE_PDF }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Immunization:** ${{ env.ENABLE_IMMUNIZATION }}" >> $GITHUB_STEP_SUMMARY
+      - name: Upload session logs to artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: all-logs
+          path: mission-control/logs/
 
       - name: Post status to tracking issue
         uses: actions/github-script@v7

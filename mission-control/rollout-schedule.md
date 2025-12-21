@@ -44,6 +44,22 @@ This file defines **which collections are active in each rollout week**.
   - fantasy/knights
   - fantasy/fairies
 
+### Week_3
+- starts_at_et: 2025-12-29
+- collections:
+  - animals/cats
+  - animals/dogs
+  - animals/horses
+  - animals/butterflies
+  - animals/sharks
+  - fantasy/dragons
+  - fantasy/elves
+  - fantasy/princesses
+  - fantasy/knights
+  - fantasy/fairies
+
+
+
 ## Notes
 - Foreman must still apply **maintenance mode throttling**: when a collection is at/above cap, it is scheduled only **once per week** (not removed).
 - Keep lists explicit (no “etc.” placeholders) so Foreman can parse deterministically.

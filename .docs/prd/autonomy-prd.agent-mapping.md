@@ -2,6 +2,7 @@
 
 Scope: reconcile the “Agent 0–5” roles in `.docs/prd/autonomy-prd.md` with how this repo actually structures automation:
 - **Agents** live under `.agents/<agent-name>/` and return **structured output** (TypeScript types) with validation/idempotency expectations (see `.agents/README.md`).
+- **Model Policy**: All decision-making agents MUST use `gemini-3-flash-preview` with **Thinking Level: MEDIUM**.
 - **Entrypoints** are typically `scripts/morning-routine/tasks/*.ts` and orchestrate filesystem, Hugo content, R2/CF, and agent calls.
 
 ## Mapping table
